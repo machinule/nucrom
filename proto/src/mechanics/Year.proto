@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package nucrom;
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+message YearMechanicSettings {
+  optional int32 init_year = 1;
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+message YearMechanicState {
+  optional int32 year = 2;
+}
+
+// ========== Moves ==========
+
+// The top-level moves proto included in Moves.
+
+message YearMechanicMoves {
+}
