@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package nucrom;
+
+import "Enums.proto";
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+
+message LeaderMechanicSettings {
+  repeated LeaderSettings leader_settings = 1;
+}
+
+message LeaderSettings {
+  optional string name = 1;
+  optional ProvinceId province = 2;
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+
+message LeaderMechanicState {
+  repeated LeaderState leader_states = 1;
+  optional ProvinceId province = 2 [default = NONE]; // Only if currently leading; NONE for dissidents
+}
+
+message LeaderState {
+}
+
+// ========== Moves ==========
+
+// The top-level moves proto included in Moves.
+
+message LeaderMechanicMoves {
+}

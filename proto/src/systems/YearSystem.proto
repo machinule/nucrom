@@ -6,7 +6,8 @@ package nucrom;
 
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
-message YearMechanicSettings {
+
+message YearSystemSettings {
   optional int32 init_year = 1;
 }
 
@@ -14,13 +15,7 @@ message YearMechanicSettings {
 
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
-message YearMechanicState {
-  optional int32 year = 2;
-}
 
-// ========== Moves ==========
-
-// The top-level moves proto included in Moves.
-
-message YearMechanicMoves {
+message YearSystemState {
+  optional int32 year = 1;
 }

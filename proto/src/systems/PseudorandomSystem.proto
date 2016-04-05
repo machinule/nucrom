@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package nucrom;
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+
+message PseudorandomSystemSettings {
+  optional int64 init_seed = 1;
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+
+message PseudorandomSystemState {
+  optional int64 seed = 1;
+}

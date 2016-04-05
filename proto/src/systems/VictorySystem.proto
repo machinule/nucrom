@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package nucrom;
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+
+message VictorySystemSettings {
+  optional int32 victory_points_init = 1;
+  optional int32 victory_points_max = 2;
+  optional VictoryStore usa_store = 3;
+  optional VictoryStore ussr_store = 4;
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+
+message VictorySystemState {
+  optional VictoryStore usa_store = 1;
+  optional VictoryStore ussr_store = 2;
+}
+
+// ========== Other ==========
+
+message VictoryStore {
+  optional int32 victory_points = 1;
+}

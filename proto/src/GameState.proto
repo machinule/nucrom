@@ -4,24 +4,32 @@ package nucrom;
 
 import "GameSettings.proto";
 
-import "mechanics/Year.proto";
+import "systems/PseudorandomSystem.proto";
+import "systems/VictorySystem.proto";
+import "systems/YearSystem.proto";
+import "systems/HeatSystem.proto";
+
+import "mechanics/ProvinceMechanic.proto";
 
 message GameState {
   optional int32 turn = 1;
-  optional GameSettings settings = 2;
+  optional GameSettings game_settings = 2;
+
+  // Systems
+  optional PseudorandomSystemState pseudorandom_system_state = 3;
+  optional VictorySystemState victory_system_state = 4;
+  optional YearSystemState year_system_state = 5;
+  optional HeatSystemState heat_system_state = 6;
 
   // Mechanics
-  //optional PseudorandomMechanicState pseudorandom_state = 3;
-  //optional HeatMechanicState heat_state = 4;
-  //optional VictoryMechanicState victory_state = 5;
-  optional YearMechanicState year_mechanic = 6;
+  optional ProvinceMechanicState province_mechanic_state = 101;
 
   // Turn Log
-  repeated TurnLogEntry turn_log_entries = 30;
+  repeated TurnLogEntry turn_log_entries = 201;
 }
 
 message TurnLogEntry {
-  //optional GameState initial_state = 1;
+  optional GameState initial_state = 1;
   //optional MoveList usa_moves = 2;
   //optional MoveList ussr_moves = 3;
   //repeated Event events = 4;

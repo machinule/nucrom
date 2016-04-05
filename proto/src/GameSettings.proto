@@ -2,16 +2,23 @@ syntax = "proto2";
 
 package nucrom;
 
-//import "PseudorandomMechanic.proto"
-//import "HeatMechanic.proto"
-//import "VictoryMechanic.proto"
-import "mechanics/Year.proto";
+import "systems/PseudorandomSystem.proto";
+import "systems/VictorySystem.proto";
+import "systems/YearSystem.proto";
+import "systems/HeatSystem.proto";
+
+import "mechanics/ProvinceMechanic.proto";
 
 // GameSettings contains constants over the course of the game.
 // These are not logged each turn, but merely copied to the top level GameState.
+
 message GameSettings {
-  //optional PseudorandomMechanicSettings pseudorandom_settings = 1;
-  //optional HeatMechanicSettings heat_settings = 2;
-  //optional VictoryMechanicSettings victory_settings = 3;
-  optional YearMechanicSettings year_settings = 4;
+  // Systems
+  optional PseudorandomSystemSettings pseudorandom_system_settings = 1;
+  optional VictorySystemSettings victory_system_settings = 2;
+  optional YearSystemSettings year_system_settings = 3;
+  optional HeatSystemSettings heat_system_settings = 4;
+
+  // Mechanics
+  optional ProvinceMechanicSettings province_mechanic_settings = 101;
 }
