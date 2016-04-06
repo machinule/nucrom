@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package nucrom;
+
+import "Enums.proto";
+import "common/Dissidents.proto";
+
+// ========== Ids ==========
+
+enum ConflictType {
+  CIVIL_WAR = 1;
+  CONVENTIONAL_WAR = 2;
+  MILITARY_ACTION = 3;
+  COLONIAL_WAR = 4;
+}
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+message ConflictMechanicSettings {
+  repeated ConflictState init_active = 1;
+  repeated ConflictState init_dormant = 2;
+  repeated ConflictState init_possible = 3;
+}
+
+// Settings for a single conflict.
+message ConflictSettings {
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+message ConflictMechanicState {
+  repeated ConflictState active = 1;
+  repeated ConflictState dormant = 2;
+  repeated ConflictState possible = 3;
+}
+
+// The state for a single Conflict.
+message ConflictState {
+  optional string name = 1 [default = "War"];
+  optional ProvinceId location = 15;
+  optional ConflictType type = 2;
+  optional int32 goal = 3 [default = 1];
+  optional int32 defender_progress = 4 [default = 0];
+  optional int32 attacker_progress = 5 [default = 0];
+  optional Dissidents rebels = 6;
+  repeated ProvinceId attacker = 7;
+  optional ProvinceId defender = 8;
+  optional int32 length = 9 [default = -1];
+  optional ProvinceId attacker_supporter = 10;
+  optional ProvinceId defender_supporter = 11;
+  optional int32 base_chance = 12 [default = 200000]; // Base chance
+  optional int32 att_chance_mod = 13 [default = 000000];
+  optional int32 def_chance_mod = 14 [default = 000000];
+}

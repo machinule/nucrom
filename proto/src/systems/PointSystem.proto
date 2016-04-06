@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package nucrom; 
+
+// ========== Settings ==========
+
+// the top-level settings proto included in gamesettings.
+// immutable over the duration of a single game.
+
+message PointSystemSettings {
+  optional  PointSettings usa_settings = 1;
+  optional PointSettings ussr_settings = 2;
+}
+
+message PointSettings {
+  optional int32 political_store_init = 1;
+  optional int32 political_income_base = 2;
+  optional int32 military_store_init = 3;
+  optional int32 military_income_base = 4;
+  optional int32 covert_store_init = 5;
+  optional int32 covert_income_base = 6;
+}
+
+// ========== State ==========
+
+// The top-level state proto included in GameState.
+// Mutated each turn based on moves.
+
+message PointState {
+  optional PointState usa_state = 1;
+  optional PointState ussr_state = 2;
+}
+
+message PointSystemState {
+  optional int32 political = 1;
+  optional int32 military = 2;
+  optional int32 covert = 3;
+}

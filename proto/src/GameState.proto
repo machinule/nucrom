@@ -10,6 +10,7 @@ import "systems/YearSystem.proto";
 import "systems/HeatSystem.proto";
 
 import "mechanics/ProvinceMechanic.proto";
+import "mechanics/LeaderMechanic.proto";
 
 message GameState {
   optional int32 turn = 1;
@@ -23,6 +24,7 @@ message GameState {
 
   // Mechanics
   optional ProvinceMechanicState province_mechanic_state = 101;
+  optional LeaderMechanicState leader_mechanic_state = 102;
 
   // Turn Log
   repeated TurnLogEntry turn_log_entries = 201;

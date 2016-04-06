@@ -15,7 +15,12 @@ message LeaderMechanicSettings {
 
 message LeaderSettings {
   optional string name = 1;
-  optional ProvinceId province = 2;
+  optional int32 birth_year = 2;
+  optional int32 start_year = 3;
+  optional int32 end_year = 4;
+  optional Culture culture = 5;
+  repeated ProvinceId provinces = 6;
+  optional bool elected = 8;
 }
 
 // ========== State ==========
@@ -24,11 +29,14 @@ message LeaderSettings {
 // Mutated each turn based on moves.
 
 message LeaderMechanicState {
-  repeated LeaderState leader_states = 1;
-  optional ProvinceId province = 2 [default = NONE]; // Only if currently leading; NONE for dissidents
+  repeated LeaderState active = 1;
+  repeated LeaderState dead = 2;
+  repeated LeaderState inactive = 3;
 }
 
 message LeaderState {
+  optional string name = 1;
+  optional ProvinceId province = 2 [default = NONE]; // Only if currently leading; NONE for dissidents
 }
 
 // ========== Moves ==========

@@ -25,7 +25,7 @@ message ProvinceSettings {
   optional ProvinceId init_occupier = 7 [default = NONE];
   optional string init_leader = 8;
   //optional Dissidents init_dissidents = 9;
-  optional ProvinceRegion region = 10;
+  optional Region region = 10;
   //optional Culture culture = 11;
   optional bool coastal = 12 [default = false];
 }

@@ -8,6 +8,7 @@ import "systems/YearSystem.proto";
 import "systems/HeatSystem.proto";
 
 import "mechanics/ProvinceMechanic.proto";
+import "mechanics/LeaderMechanic.proto";
 
 // GameSettings contains constants over the course of the game.
 // These are not logged each turn, but merely copied to the top level GameState.
@@ -21,4 +22,5 @@ message GameSettings {
 
   // Mechanics
   optional ProvinceMechanicSettings province_mechanic_settings = 101;
+  optional LeaderMechanicSettings leader_mechanic_settings = 102;
 }

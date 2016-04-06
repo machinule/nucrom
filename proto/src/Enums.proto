@@ -11,7 +11,7 @@ enum Government {
   OCCUPIED = 6;
 }
 
-enum ProvinceRegion {
+enum Region {
   WESTERN_EUROPE = 1;
   EASTERN_EUROPE = 2;
   CENTRAL_AMERICA = 3;
@@ -132,4 +132,12 @@ enum ProvinceId {
   // SUPERPOWERS
   USA = 998;
   USSR = 999;
+}
+
+enum Culture {
+  ENGLISH = 1;
+  SPANISH = 2;
+  FRENCH = 3;
+  GERMAN = 4;
+  PORTUGUESE = 5;
 }

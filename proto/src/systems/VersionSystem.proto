@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package nucrom;
+
+// ========== Settings ==========
+
+// The top-level settings proto included in GameSettings.
+// Immutable over the duration of a single game.
+
+message VersionMechanicSettings {
+  optional string version = 1;
+}
