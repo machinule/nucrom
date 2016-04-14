@@ -1,10 +1,10 @@
 syntax = "proto2";
 
-package nucrom;
+package pb;
 
 import "Enums.proto";
 
-import "common/Dissidents.proto";
+import "Dissidents.proto";
 
 // ========== Settings ==========
 

@@ -1,14 +1,17 @@
 syntax = "proto2";
 
-package nucrom;
+package pb;
 
 // ========== Settings ==========
 
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message PseudorandomSystemSettings {
-  optional int64 init_seed = 1;
+message HeatSystemSettings {
+  optional int32 init_heat = 1;
+  optional int32 min_heat = 2;
+  optional int32 max_heat = 3;
+  optional int32 heat_decay = 4;
 }
 
 // ========== State ==========
@@ -16,6 +19,6 @@ message PseudorandomSystemSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message PseudorandomSystemState {
-  optional int64 seed = 1;
+message HeatSystemState {
+  optional int32 heat = 1;
 }

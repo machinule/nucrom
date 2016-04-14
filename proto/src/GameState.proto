@@ -1,30 +1,30 @@
 syntax = "proto2";
 
-package nucrom;
+package pb;
 
 import "GameSettings.proto";
 
-import "systems/PseudorandomSystem.proto";
-import "systems/VictorySystem.proto";
-import "systems/YearSystem.proto";
-import "systems/HeatSystem.proto";
+import "PseudorandomSystem.proto";
+import "VictorySystem.proto";
+import "YearSystem.proto";
+import "HeatSystem.proto";
 
-import "mechanics/ProvinceMechanic.proto";
-import "mechanics/LeaderMechanic.proto";
+import "ProvinceMechanic.proto";
+import "LeaderMechanic.proto";
 
 message GameState {
   optional int32 turn = 1;
   optional GameSettings game_settings = 2;
 
   // Systems
-  optional PseudorandomSystemState pseudorandom_system_state = 3;
-  optional VictorySystemState victory_system_state = 4;
-  optional YearSystemState year_system_state = 5;
-  optional HeatSystemState heat_system_state = 6;
+  optional PseudorandomSystemState pseudorandom_sys_state = 3;
+  optional VictorySystemState victory_sys_state = 4;
+  optional YearSystemState year_sys_state = 5;
+  optional HeatSystemState heat_sys_state = 6;
 
   // Mechanics
-  optional ProvinceMechanicState province_mechanic_state = 101;
-  optional LeaderMechanicState leader_mechanic_state = 102;
+  optional ProvinceMechanicState province_mech_state = 101;
+  optional LeaderMechanicState leader_mech_state = 102;
 
   // Turn Log
   repeated TurnLogEntry turn_log_entries = 201;

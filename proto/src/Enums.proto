@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package nucrom;
+package pb;
 
 enum Government {
   WEAK = 1;
