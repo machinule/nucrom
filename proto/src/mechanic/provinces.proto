@@ -2,16 +2,15 @@ syntax = "proto2";
 
 package pb;
 
-import "Enums.proto";
-
-import "Dissidents.proto";
+import "enums.proto";
+import "dissidents.proto";
 
 // ========== Settings ==========
 
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message ProvinceMechanicSettings {
+message ProvincesSettings {
   repeated ProvinceSettings province_settings = 1;
 }
 
@@ -35,7 +34,7 @@ message ProvinceSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message ProvinceMechanicState {
+message ProvincesState {
   repeated ProvinceState province_states = 1;
 }
 
@@ -46,11 +45,4 @@ message ProvinceState {
   optional ProvinceId occupier = 4;
   optional string leader = 5;
   optional Dissidents dissidents = 6;
-}
-
-// ========== Moves ==========
-
-// The top-level moves proto included in Moves.
-
-message ProvinceMechanicMoves {
 }

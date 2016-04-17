@@ -27,7 +27,7 @@ func TestNewSettings(t *testing.T) {
 		},
 		{
 			proto: &pb.GameSettings{
-				HeatSysSettings: &pb.HeatSystemSettings{
+				HeatSettings: &pb.HeatSettings{
 					Init:  proto.Int32(50),
 					Min:   proto.Int32(0),
 					Mxm:   proto.Int32(100),

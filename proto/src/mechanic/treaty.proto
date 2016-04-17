@@ -2,14 +2,14 @@ syntax = "proto2";
 
 package pb;
 
-import "Enums.proto";
+import "enums.proto";
 
 // ========== Settings ==========
 
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message TreatyMechanicSettings {
+message TreatySettings {
 }
 
 // ========== State ==========
@@ -17,7 +17,7 @@ message TreatyMechanicSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message TreatyMechanicState {
+message TreatyState {
   repeated Treaty ratified_treaty = 1;
   optional Treaty proposed_treaty = 2;
   optional AvailableTermList available_ussr_terms = 3;

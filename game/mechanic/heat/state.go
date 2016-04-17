@@ -17,7 +17,7 @@ func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
 	}
 	return &State{
 		settings: prev.settings,
-		heat:     stateProto.GetHeatSysState().GetHeat(),
+		heat:     stateProto.GetHeatState().GetHeat(),
 	}, nil
 }
 
@@ -25,10 +25,10 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 	if stateProto == nil {
 		return fmt.Errorf("attempting to fill in nil GameState proto.")
 	}
-	if stateProto.GetHeatSysState() == nil {
-		stateProto.HeatSysState = &pb.HeatSystemState{}
+	if stateProto.GetHeatState() == nil {
+		stateProto.HeatState = &pb.HeatState{}
 	}
-	stateProto.GetHeatSysState().Heat = proto.Int32(s.heat)
+	stateProto.GetHeatState().Heat = proto.Int32(s.heat)
 	return nil
 }
 

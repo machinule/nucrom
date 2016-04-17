@@ -22,7 +22,7 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 		return nil, fmt.Errorf("validating settings proto: %e", err)
 	}
 	return &Settings{
-		init: settingsProto.GetYearSysSettings().GetInitYear(),
+		init: settingsProto.GetYearSettings().GetInitYear(),
 		incr: 1,
 	}, nil
 }

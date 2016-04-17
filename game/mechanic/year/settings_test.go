@@ -23,7 +23,7 @@ func TestNewSettings(t *testing.T) {
 		},
 		{
 			proto: &pb.GameSettings{
-				YearSysSettings: &pb.YearSystemSettings{
+				YearSettings: &pb.YearSettings{
 					InitYear: proto.Int32(43),
 				},
 			},

@@ -17,7 +17,7 @@ func TestNewState(t *testing.T) {
 	cases := []NewStateCase{
 		{
 			proto: &pb.GameState{
-				HeatSysState: &pb.HeatSystemState{
+				HeatState: &pb.HeatState{
 					Heat: proto.Int32(45),
 				},
 			},
@@ -29,7 +29,7 @@ func TestNewState(t *testing.T) {
 		},
 		{
 			proto: &pb.GameState{
-				HeatSysState: &pb.HeatSystemState{
+				HeatState: &pb.HeatState{
 					Heat: proto.Int32(45),
 				},
 			},
@@ -74,7 +74,7 @@ func TestMarshal(t *testing.T) {
 			},
 			proto: &pb.GameState{},
 			want: &pb.GameState{
-				HeatSysState: &pb.HeatSystemState{
+				HeatState: &pb.HeatState{
 					Heat: proto.Int32(56),
 				},
 			},
@@ -109,7 +109,7 @@ func TestMarshal(t *testing.T) {
 
 func TestMechanic(t *testing.T) {
 	settingsProto := &pb.GameSettings{
-		HeatSysSettings: &pb.HeatSystemSettings{
+		HeatSettings: &pb.HeatSettings{
 			Init:  proto.Int32(70),
 			Min:   proto.Int32(0),
 			Mxm:   proto.Int32(100),

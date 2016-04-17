@@ -7,11 +7,8 @@ package pb;
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message HeatSystemSettings {
-  optional int32 init = 1;
-  optional int32 min = 2 [default=0];
-  optional int32 mxm = 3 [default=100];
-  optional int32 decay = 4;
+message YearSettings {
+  optional int32 init_year = 1 [default=1948];
 }
 
 // ========== State ==========
@@ -19,6 +16,6 @@ message HeatSystemSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message HeatSystemState {
-  optional int32 heat = 1;
+message YearState {
+  optional int32 year = 1;
 }
