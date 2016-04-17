@@ -27,7 +27,7 @@ func NewSettings(settingsProto *pb.GameSettings) (*settings, error) {
 
 func (s *settings) InitState() (*state, error) {
 	return &state{
-		Settings: s,
-		year:     s.init,
+		s:    s,
+		year: s.init,
 	}, nil
 }
