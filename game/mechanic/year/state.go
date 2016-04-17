@@ -1,3 +1,4 @@
+// The year mechanic keeps track of the current game year.
 package year
 
 import (
@@ -6,22 +7,25 @@ import (
 	"github.com/machinule/nucrom/proto/gen"
 )
 
-type state struct {
-	s    *settings
-	year int32
+// The state of the year mechanic.
+type State struct {
+	settings *Settings
+	year     int32
 }
 
-func NewState(stateProto *pb.GameState, prev *state) (*state, error) {
+// NewState creates a new state from the GameState message and the previous state.
+func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
 	if prev == nil {
 		return nil, fmt.Errorf("recieved nil previous state, unable to propogate settings.")
 	}
-	return &state{
-		s:    prev.s,
-		year: stateProto.GetYearSysState().GetYear(),
+	return &State{
+		settings: prev.settings,
+		year:     stateProto.GetYearSysState().GetYear(),
 	}, nil
 }
 
-func (s *state) Marshal(stateProto *pb.GameState) error {
+// Marshal fills in the GameState proto with the current state.
+func (s *State) Marshal(stateProto *pb.GameState) error {
 	if stateProto == nil {
 		return fmt.Errorf("attempting to fill in nil GameState proto.")
 	}
@@ -32,10 +36,12 @@ func (s *state) Marshal(stateProto *pb.GameState) error {
 	return nil
 }
 
-func (s *state) Year() int32 {
+// Year gets the current year.
+func (s *State) Year() int32 {
 	return s.year
 }
 
-func (s *state) Incr() {
-	s.year += s.s.incr
+// Incr increments the year by the increment value in settings.
+func (s *State) Incr() {
+	s.year += s.settings.incr
 }

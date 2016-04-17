@@ -8,7 +8,7 @@ import (
 
 type NewStateCase struct {
 	proto *pb.GameState
-	prev  *state
+	prev  *State
 	year  int32
 	err   bool
 }
@@ -21,8 +21,8 @@ func TestNewState(t *testing.T) {
 					Year: proto.Int32(34),
 				},
 			},
-			prev: &state{
-				s: &settings{},
+			prev: &State{
+				settings: &Settings{},
 			},
 			year: 34,
 			err:  false,
@@ -53,14 +53,14 @@ func TestNewState(t *testing.T) {
 		if got, want := s.year, tc.year; got != want {
 			t.Errorf("year: got %d, want %d", got, want)
 		}
-		if got, want := s.s, tc.prev.s; got != want {
+		if got, want := s.settings, tc.prev.settings; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
 	}
 }
 
 type MarshalCase struct {
-	s     state
+	s     State
 	proto *pb.GameState
 	want  *pb.GameState
 	err   bool
@@ -69,7 +69,7 @@ type MarshalCase struct {
 func TestMarshal(t *testing.T) {
 	cases := []MarshalCase{
 		{
-			s: state{
+			s: State{
 				year: 364,
 			},
 			proto: &pb.GameState{},
@@ -81,7 +81,7 @@ func TestMarshal(t *testing.T) {
 			err: false,
 		},
 		{
-			s: state{
+			s: State{
 				year: 364,
 			},
 			proto: nil,
