@@ -1,4 +1,4 @@
-package year
+package heat
 
 import (
 	"github.com/golang/protobuf/proto"
@@ -9,7 +9,9 @@ import (
 type NewSettingsCase struct {
 	proto *pb.GameSettings
 	init  int32
-	incr  int32
+	min   int32
+	mxm   int32
+	decay int32
 	err   bool
 }
 
@@ -17,19 +19,26 @@ func TestNewSettings(t *testing.T) {
 	cases := []NewSettingsCase{
 		{
 			proto: &pb.GameSettings{},
-			init:  1948,
-			incr:  1,
+			init:  0, // No default
+			min:   0,
+			mxm:   100,
+			decay: 0, // No default
 			err:   false,
 		},
 		{
 			proto: &pb.GameSettings{
-				YearSettings: &pb.YearSettings{
-					InitYear: proto.Int32(43),
+				HeatSettings: &pb.HeatSettings{
+					Init:  proto.Int32(50),
+					Min:   proto.Int32(0),
+					Mxm:   proto.Int32(100),
+					Decay: proto.Int32(5),
 				},
 			},
-			init: 43,
-			incr: 1,
-			err:  false,
+			init:  50,
+			min:   0,
+			mxm:   100,
+			decay: 5,
+			err:   false,
 		},
 	}
 	for _, tc := range cases {
@@ -48,31 +57,42 @@ func TestNewSettings(t *testing.T) {
 		if got, want := s.init, tc.init; got != want {
 			t.Errorf("init: got %d, want %d", got, want)
 		}
-		if got, want := s.incr, tc.incr; got != want {
-			t.Errorf("incr: got %d, want %d", got, want)
+		if got, want := s.min, tc.min; got != want {
+			t.Errorf("min: got %d, want %d", got, want)
+		}
+		if got, want := s.mxm, tc.mxm; got != want {
+			t.Errorf("mxm: got %d, want %d", got, want)
+		}
+		if got, want := s.min, tc.min; got != want {
+			t.Errorf("min: got %d, want %d", got, want)
+		}
+		if got, want := s.decay, tc.decay; got != want {
+			t.Errorf("decay: got %d, want %d", got, want)
 		}
 	}
 }
 
 type InitStateCase struct {
-	s    *Settings
-	year int32
-	err  bool
+	settings *Settings
+	heat     int32
+	err      bool
 }
 
 func TestInitState(t *testing.T) {
 	cases := []InitStateCase{
 		{
-			s: &Settings{
-				init: 34,
-				incr: 1,
+			settings: &Settings{
+				init:  60,
+				min:   10,
+				mxm:   90,
+				decay: 5,
 			},
-			year: 34,
+			heat: 60,
 			err:  false,
 		},
 	}
 	for _, tc := range cases {
-		s, err := tc.s.InitState()
+		s, err := tc.settings.InitState()
 		if got, want := err != nil, tc.err; got != want {
 			msg := map[bool]string{
 				true:  "error",
@@ -84,10 +104,10 @@ func TestInitState(t *testing.T) {
 		if tc.err {
 			continue
 		}
-		if got, want := s.year, tc.year; got != want {
-			t.Errorf("year: got %d, want %d", got, want)
+		if got, want := s.heat, tc.heat; got != want {
+			t.Errorf("heat: got %d, want %d", got, want)
 		}
-		if got, want := s.settings, tc.s; got != want {
+		if got, want := s.settings, tc.settings; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
 	}

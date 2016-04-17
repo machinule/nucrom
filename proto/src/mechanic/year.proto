@@ -8,7 +8,7 @@ package pb;
 // Immutable over the duration of a single game.
 
 message YearSettings {
-  optional int32 init_year = 1 [default=1954];
+  optional int32 init_year = 1 [default=1948];
 }
 
 // ========== State ==========
