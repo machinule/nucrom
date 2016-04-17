@@ -55,7 +55,7 @@ func TestNewSettings(t *testing.T) {
 }
 
 type InitStateCase struct {
-	s    *settings
+	s    *Settings
 	year int32
 	err  bool
 }
@@ -63,7 +63,7 @@ type InitStateCase struct {
 func TestInitState(t *testing.T) {
 	cases := []InitStateCase{
 		{
-			s: &settings{
+			s: &Settings{
 				init: 34,
 				incr: 1,
 			},
@@ -87,7 +87,7 @@ func TestInitState(t *testing.T) {
 		if got, want := s.year, tc.year; got != want {
 			t.Errorf("year: got %d, want %d", got, want)
 		}
-		if got, want := s.s, tc.s; got != want {
+		if got, want := s.settings, tc.s; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
 	}
