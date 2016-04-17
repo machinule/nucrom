@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package pb;
+
+import "mechanic/conflicts.proto";
+import "mechanic/heat.proto";
+import "mechanic/leaders.proto";
+import "mechanic/points.proto";
+import "mechanic/provinces.proto";
+import "mechanic/pseudorandom.proto";
+import "mechanic/treaty.proto";
+import "mechanic/victory.proto";
+import "mechanic/year.proto";
+
+// GameSettings contains constants over the course of the game.
+// These are not logged each turn, but merely copied to the top level GameState.
+message GameSettings {
+  optional ConflictsSettings conflicts_settings = 1;
+  optional HeatSettings heat_settings = 2;
+  optional LeadersSettings leaders_settings = 3;
+  optional PointsSettings points_settings = 4;
+  optional ProvincesSettings provinces_settings = 5;
+  optional PseudorandomSettings pseudorandom_settings = 6;
+  optional TreatySettings treaty_settings = 7;
+  optional VictorySettings victory_settings = 8;
+  optional YearSettings year_settings = 9;
+}

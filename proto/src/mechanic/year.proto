@@ -7,7 +7,7 @@ package pb;
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message YearSystemSettings {
+message YearSettings {
   optional int32 init_year = 1 [default=1954];
 }
 
@@ -16,6 +16,6 @@ message YearSystemSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message YearSystemState {
+message YearState {
   optional int32 year = 1;
 }

@@ -7,7 +7,7 @@ package pb;
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message VictorySystemSettings {
+message VictorySettings {
   optional int32 victory_points_init = 1;
   optional int32 victory_points_max = 2;
   optional VictoryStore usa_store = 3;
@@ -19,7 +19,7 @@ message VictorySystemSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message VictorySystemState {
+message VictoryState {
   optional VictoryStore usa_store = 1;
   optional VictoryStore ussr_store = 2;
 }

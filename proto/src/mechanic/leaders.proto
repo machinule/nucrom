@@ -2,14 +2,14 @@ syntax = "proto2";
 
 package pb;
 
-import "Enums.proto";
+import "enums.proto";
 
 // ========== Settings ==========
 
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 
-message LeaderMechanicSettings {
+message LeadersSettings {
   repeated LeaderSettings leader_settings = 1;
 }
 
@@ -28,7 +28,7 @@ message LeaderSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 
-message LeaderMechanicState {
+message LeadersState {
   repeated LeaderState active = 1;
   repeated LeaderState dead = 2;
   repeated LeaderState inactive = 3;
@@ -37,11 +37,4 @@ message LeaderMechanicState {
 message LeaderState {
   optional string name = 1;
   optional ProvinceId province = 2 [default = NONE]; // Only if currently leading; NONE for dissidents
-}
-
-// ========== Moves ==========
-
-// The top-level moves proto included in Moves.
-
-message LeaderMechanicMoves {
 }

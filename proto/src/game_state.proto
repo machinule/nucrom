@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package pb;
+
+import "mechanic/conflicts.proto";
+import "mechanic/heat.proto";
+import "mechanic/leaders.proto";
+import "mechanic/points.proto";
+import "mechanic/provinces.proto";
+import "mechanic/pseudorandom.proto";
+import "mechanic/treaty.proto";
+import "mechanic/victory.proto";
+import "mechanic/year.proto";
+
+message GameState {
+  optional ConflictsState conflicts_state = 1;
+  optional HeatState heat_state = 2;
+  optional LeadersState leaders_state = 3;
+  optional PointsState points_state = 4;
+  optional ProvincesState provinces_state = 5;
+  optional PseudorandomState pseudorandom_state = 6;
+  optional TreatyState treaty_state = 7;
+  optional VictoryState victory_state = 8;
+  optional YearState year_state = 9;
+}

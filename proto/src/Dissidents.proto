@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package pb;
 
-import "Enums.proto";
+import "enums.proto";
 
 message Dissidents {
   optional Government gov = 1;
