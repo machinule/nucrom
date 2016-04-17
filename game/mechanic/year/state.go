@@ -6,6 +6,7 @@ import (
 
 type state struct {
 	Settings *settings
+	year     int32
 }
 
 func NewState(stateProto *pb.GameState, settings *settings) (*state, error) {

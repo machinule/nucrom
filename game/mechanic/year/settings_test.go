@@ -1,0 +1,85 @@
+package year
+
+import (
+	"github.com/golang/protobuf/proto"
+	pb "github.com/machinule/nucrom/proto/gen"
+	"testing"
+)
+
+type NewSettingsCase struct {
+	proto *pb.GameSettings
+	init  int32
+	incr  int32
+	err   bool
+}
+
+func TestNewSettings(t *testing.T) {
+	cases := []NewSettingsCase{
+		{
+			proto: &pb.GameSettings{},
+			init:  1954,
+			incr:  1,
+			err:   false,
+		},
+		{
+			proto: &pb.GameSettings{
+				YearSysSettings: &pb.YearSystemSettings{
+					InitYear: proto.Int32(43),
+				},
+			},
+			init: 43,
+			incr: 1,
+			err:  false,
+		},
+	}
+	for _, tc := range cases {
+		s, err := NewSettings(tc.proto)
+		if got, want := err != nil, tc.err; got != want {
+			msg := map[bool]string{
+				true:  "error",
+				false: "no error",
+			}
+			t.Errorf("err: got %s, want %s", msg[got], msg[want])
+			continue
+		}
+		if got, want := s.init, tc.init; got != want {
+			t.Errorf("init: got %d, want %d", got, want)
+		}
+		if got, want := s.incr, tc.incr; got != want {
+			t.Errorf("incr: got %d, want %d", got, want)
+		}
+	}
+}
+
+type InitStateCase struct {
+	s    settings
+	year int32
+	err  bool
+}
+
+func TestInitState(t *testing.T) {
+	cases := []InitStateCase{
+		{
+			s: settings{
+				init: 34,
+				incr: 1,
+			},
+			year: 34,
+			err:  false,
+		},
+	}
+	for _, tc := range cases {
+		s, err := tc.s.InitState()
+		if got, want := err != nil, tc.err; got != want {
+			msg := map[bool]string{
+				true:  "error",
+				false: "no error",
+			}
+			t.Errorf("err: got %s, want %s", msg[got], msg[want])
+			continue
+		}
+		if got, want := s.year, tc.year; got != want {
+			t.Errorf("year: got %d, want %d", got, want)
+		}
+	}
+}
