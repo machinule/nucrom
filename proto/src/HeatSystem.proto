@@ -8,10 +8,10 @@ package pb;
 // Immutable over the duration of a single game.
 
 message HeatSystemSettings {
-  optional int32 init_heat = 1;
-  optional int32 min_heat = 2;
-  optional int32 max_heat = 3;
-  optional int32 heat_decay = 4;
+  optional int32 init = 1;
+  optional int32 min = 2 [default=0];
+  optional int32 mxm = 3 [default=100];
+  optional int32 decay = 4;
 }
 
 // ========== State ==========
