@@ -2,15 +2,15 @@ syntax = "proto2";
 
 package pb;
 
-import "mechanic/conflicts.proto";
-import "mechanic/heat.proto";
-import "mechanic/leaders.proto";
-import "mechanic/points.proto";
-import "mechanic/provinces.proto";
-import "mechanic/pseudorandom.proto";
-import "mechanic/treaty.proto";
-import "mechanic/victory.proto";
-import "mechanic/year.proto";
+import "conflicts.proto";
+import "heat.proto";
+import "leaders.proto";
+import "points.proto";
+import "provinces.proto";
+import "pseudorandom.proto";
+import "treaty.proto";
+import "victory.proto";
+import "year.proto";
 
 // GameSettings contains constants over the course of the game.
 // These are not logged each turn, but merely copied to the top level GameState.

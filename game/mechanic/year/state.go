@@ -20,7 +20,7 @@ func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
 	}
 	return &State{
 		settings: prev.settings,
-		year:     stateProto.GetYearSysState().GetYear(),
+		year:     stateProto.GetYearState().GetYear(),
 	}, nil
 }
 
@@ -29,10 +29,9 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 	if stateProto == nil {
 		return fmt.Errorf("attempting to fill in nil GameState proto.")
 	}
-	if stateProto.GetYearSysState() == nil {
-		stateProto.YearSysState = &pb.YearSystemState{}
+	stateProto.YearState = &pb.YearState{
+		Year: proto.Int32(s.year),
 	}
-	stateProto.GetYearSysState().Year = proto.Int32(s.year)
 	return nil
 }
 

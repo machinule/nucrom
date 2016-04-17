@@ -1,9 +1,9 @@
 package main
 
 import (
-    "github.com/machinule/nucrom/game"
+	"github.com/machinule/nucrom/game"
 )
 
 func main() {
-    nucrom.Run()
+	nucrom.Run()
 }

@@ -1,11 +1,11 @@
 package nucrom
 
 import (
-    "log"
+	"log"
 
-    "github.com/machinule/nucrom/frontend/sdl2"
+	"github.com/machinule/nucrom/frontend/sdl2"
 
-    "github.com/machinule/nucrom/game/setup"
+	"github.com/machinule/nucrom/game/setup"
 )
 
 func ui() {
@@ -19,8 +19,6 @@ func ui() {
 }
 
 func Run() {
-    setup.Try()
-
-    gameSettings := setup.CreateGameSettings()
-    log.Printf("Game settings: ", gameSettings)
+	gameSettings := setup.CreateGameSettings()
+	log.Printf("Game settings: ", gameSettings)
 }

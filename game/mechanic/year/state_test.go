@@ -17,7 +17,7 @@ func TestNewState(t *testing.T) {
 	cases := []NewStateCase{
 		{
 			proto: &pb.GameState{
-				YearSysState: &pb.YearSystemState{
+				YearState: &pb.YearState{
 					Year: proto.Int32(34),
 				},
 			},
@@ -29,7 +29,7 @@ func TestNewState(t *testing.T) {
 		},
 		{
 			proto: &pb.GameState{
-				YearSysState: &pb.YearSystemState{
+				YearState: &pb.YearState{
 					Year: proto.Int32(34),
 				},
 			},
@@ -74,7 +74,7 @@ func TestMarshal(t *testing.T) {
 			},
 			proto: &pb.GameState{},
 			want: &pb.GameState{
-				YearSysState: &pb.YearSystemState{
+				YearState: &pb.YearState{
 					Year: proto.Int32(364),
 				},
 			},
@@ -109,7 +109,7 @@ func TestMarshal(t *testing.T) {
 
 func TestMechanic(t *testing.T) {
 	settingsProto := &pb.GameSettings{
-		YearSysSettings: &pb.YearSystemSettings{
+		YearSettings: &pb.YearSettings{
 			InitYear: proto.Int32(43),
 		},
 	}
