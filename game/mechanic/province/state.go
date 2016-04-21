@@ -3,7 +3,6 @@ package province
 
 import (
 	"fmt"
-	//TODO: "github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 )
 
@@ -15,7 +14,12 @@ type State struct {
 
 // The state of a single province
 type ProvState struct {
-	id pb.ProvinceId // Province id enum
+	id         pb.ProvinceId // Province id enum
+	influence  int32         // Influence
+	government pb.Government // Government
+	occupier   pb.ProvinceId // Occupier
+	leader     string        // Leader
+	// dissidents TYPE // Dissidents
 }
 
 // NewState creates a new state from the GameState message and the previous state.
@@ -49,4 +53,20 @@ func (s *State) Get(id pb.ProvinceId) *ProvState {
 
 func (s *ProvState) Id() pb.ProvinceId {
 	return s.id
+}
+
+func (s *ProvState) Infl() int32 {
+	return s.influence
+}
+
+func (s *ProvState) Gov() pb.Government {
+	return s.government
+}
+
+func (s *ProvState) Occupier() pb.ProvinceId {
+	return s.occupier
+}
+
+func (s *ProvState) Leader() string {
+	return s.leader
 }

@@ -1,15 +1,23 @@
 package province
 
 import (
-	//"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
 
 type NewSettingsCase struct {
-	proto *pb.GameSettings
-	id    pb.ProvinceId
-	err   bool
+	proto           *pb.GameSettings
+	id              pb.ProvinceId
+	label           string
+	adjacency       []pb.ProvinceId
+	stability_base  int32
+	region          pb.Region
+	coastal         bool
+	init_influence  int32
+	init_government pb.Government
+	init_leader     string
+	err             bool
 }
 
 func TestNewSettings(t *testing.T) {
@@ -19,13 +27,31 @@ func TestNewSettings(t *testing.T) {
 				ProvincesSettings: &pb.ProvincesSettings{
 					ProvinceSettings: []*pb.ProvinceSettings{
 						&pb.ProvinceSettings{
-							Id: pb.ProvinceId_ROMANIA.Enum(),
+							Id:             pb.ProvinceId_ROMANIA.Enum(),
+							Label:          proto.String("Romania"),
+							Adjacency:      []pb.ProvinceId{pb.ProvinceId_USSR, pb.ProvinceId_HUNGARY},
+							StabilityBase:  proto.Int32(2),
+							Region:         pb.Region_EASTERN_EUROPE.Enum(),
+							Coastal:        proto.Bool(false),
+							InitInfluence:  proto.Int32(-1),
+							InitGovernment: pb.Government_COMMUNISM.Enum(),
+							InitLeader:     proto.String("David Mihai"),
 						},
 					},
 				},
 			},
-			err: false,
-			id:  pb.ProvinceId_ROMANIA,
+			err:   false,
+			id:    pb.ProvinceId_ROMANIA,
+			label: "Romania",
+			adjacency: []pb.ProvinceId{
+				pb.ProvinceId_USSR, pb.ProvinceId_HUNGARY,
+			},
+			stability_base:  2,
+			region:          pb.Region_EASTERN_EUROPE,
+			coastal:         false,
+			init_influence:  -1,
+			init_government: pb.Government_COMMUNISM,
+			init_leader:     "David Mihai",
 		},
 	}
 	for _, tc := range cases {
@@ -44,13 +70,31 @@ func TestNewSettings(t *testing.T) {
 		if got, want := s.Get(tc.id).Id(), tc.id; got != want {
 			t.Errorf("id: got %d, want %d", got, want)
 		}
+		if got, want := s.Get(tc.id).Label(), tc.label; got != want {
+			t.Errorf("label: got %d, want %d", got, want)
+		}
+		/*if got, want := s.Get(tc.id).Adjacencies(), tc.adjacency; got != want {
+			t.Errorf("adjacency: got %d, want %d", got, want)
+		}*/
+		if got, want := s.Get(tc.id).BaseStability(), tc.stability_base; got != want {
+			t.Errorf("base stability: got %d, want %d", got, want)
+		}
+		if got, want := s.Get(tc.id).Region(), tc.region; got != want {
+			t.Errorf("region: got %d, want %d", got, want)
+		}
+		if got, want := s.Get(tc.id).isCoastal(), tc.coastal; got != want {
+			t.Errorf("coastal: got %d, want %d", got, want)
+		}
 	}
 }
 
 type InitStateCase struct {
-	s   *Settings
-	id  pb.ProvinceId
-	err bool
+	s          *Settings
+	id         pb.ProvinceId
+	influence  int32
+	government pb.Government
+	leader     string
+	err        bool
 }
 
 func TestInitState(t *testing.T) {
@@ -59,12 +103,18 @@ func TestInitState(t *testing.T) {
 			s: &Settings{
 				Provinces: map[pb.ProvinceId]*ProvSettings{
 					pb.ProvinceId_ROMANIA: &ProvSettings{
-						id: pb.ProvinceId_ROMANIA,
+						id:              pb.ProvinceId_ROMANIA,
+						init_influence:  -1,
+						init_government: pb.Government_COMMUNISM,
+						init_leader:     "David Mihai",
 					},
 				},
 			},
-			id:  pb.ProvinceId_ROMANIA,
-			err: false,
+			id:         pb.ProvinceId_ROMANIA,
+			influence:  -1,
+			government: pb.Government_COMMUNISM,
+			leader:     "David Mihai",
+			err:        false,
 		},
 	}
 	for _, tc := range cases {
@@ -85,6 +135,15 @@ func TestInitState(t *testing.T) {
 		}
 		if got, want := s.settings, tc.s; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
+		}
+		if got, want := s.Get(tc.id).Infl(), tc.influence; got != want {
+			t.Errorf("influence: got %d, want %d", got, want)
+		}
+		if got, want := s.Get(tc.id).Gov(), tc.government; got != want {
+			t.Errorf("government: got %d, want %d", got, want)
+		}
+		if got, want := s.Get(tc.id).Leader(), tc.leader; got != want {
+			t.Errorf("leader: got %d, want %d", got, want)
 		}
 	}
 }

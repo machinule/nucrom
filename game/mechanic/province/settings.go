@@ -12,7 +12,18 @@ type Settings struct {
 
 // Settings for an individual province
 type ProvSettings struct {
-	id pb.ProvinceId // Province id enum
+	id             pb.ProvinceId   // Province id enum
+	label          string          // Text label of the country
+	adjacencies    []pb.ProvinceId // List of adjacent countries
+	stability_base int32           // Base stability
+	region         pb.Region       // Region
+	coastal        bool            // Coastal
+
+	// Initialization
+	init_influence  int32         // Influence
+	init_government pb.Government // Government enum
+	init_leader     string        // Leader
+	// init_dissidents TYPE // Dissidents
 }
 
 func validate(settingsProto *pb.GameSettings) error {
@@ -26,11 +37,19 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 		return nil, fmt.Errorf("validating settings proto: %e", err)
 	}
 
-	provs := make(map[pb.ProvinceId]*ProvSettings)
 	// Contains map of all individual province settings
+	provs := make(map[pb.ProvinceId]*ProvSettings)
 	for _, p := range settingsProto.GetProvincesSettings().GetProvinceSettings() {
 		provs[p.GetId()] = &ProvSettings{
-			id: p.GetId(),
+			id:              p.GetId(),
+			label:           p.GetLabel(),
+			adjacencies:     p.GetAdjacency(),
+			stability_base:  p.GetStabilityBase(),
+			region:          p.GetRegion(),
+			coastal:         p.GetCoastal(),
+			init_influence:  p.GetInitInfluence(),
+			init_government: p.GetInitGovernment(),
+			init_leader:     p.GetInitLeader(),
 		}
 	}
 
@@ -45,7 +64,10 @@ func (s *Settings) InitState() (*State, error) {
 	// Contains map of all individual province states
 	for _, p := range s.Provinces {
 		provs[p.Id()] = &ProvState{
-			id: p.Id(),
+			id:         p.Id(),
+			influence:  p.initInfl(),
+			government: p.initGov(),
+			leader:     p.initLeader(),
 		}
 	}
 
@@ -57,10 +79,44 @@ func (s *Settings) InitState() (*State, error) {
 
 // GETTERS
 
+func (s *Settings) Get(id pb.ProvinceId) *ProvSettings {
+	return s.Provinces[id]
+}
+
 func (s *ProvSettings) Id() pb.ProvinceId {
 	return s.id
 }
 
-func (s *Settings) Get(id pb.ProvinceId) *ProvSettings {
-	return s.Provinces[id]
+func (s *ProvSettings) Label() string {
+	return s.label
+}
+
+func (s *ProvSettings) Adjacencies() []pb.ProvinceId {
+	return s.adjacencies
+}
+
+func (s *ProvSettings) BaseStability() int32 {
+	return s.stability_base
+}
+
+func (s *ProvSettings) Region() pb.Region {
+	return s.region
+}
+
+func (s *ProvSettings) isCoastal() bool {
+	return s.coastal
+}
+
+// Initialization
+
+func (s *ProvSettings) initInfl() int32 {
+	return s.init_influence
+}
+
+func (s *ProvSettings) initGov() pb.Government {
+	return s.init_government
+}
+
+func (s *ProvSettings) initLeader() string {
+	return s.init_leader
 }
