@@ -28,7 +28,7 @@ func TestNewSettings(t *testing.T) {
 						&pb.ProvinceSettings{
 							Id:             pb.ProvinceId_ROMANIA,
 							Label:          "Romania",
-							Adjacency:      []pb.ProvinceId{pb.ProvinceId_USSR, pb.ProvinceId_HUNGARY},
+							Adjacency:      []pb.ProvinceId{pb.ProvinceId_P_USSR, pb.ProvinceId_HUNGARY},
 							StabilityBase:  2,
 							Region:         pb.Region_EASTERN_EUROPE,
 							Coastal:        false,
@@ -43,7 +43,7 @@ func TestNewSettings(t *testing.T) {
 			id:    pb.ProvinceId_ROMANIA,
 			label: "Romania",
 			adjacency: []pb.ProvinceId{
-				pb.ProvinceId_USSR, pb.ProvinceId_HUNGARY,
+				pb.ProvinceId_P_USSR, pb.ProvinceId_HUNGARY,
 			},
 			stability_base:  2,
 			region:          pb.Region_EASTERN_EUROPE,
