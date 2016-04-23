@@ -96,18 +96,24 @@ type MarshalCase struct {
 	err   bool
 }
 
-/* TODO:
 func TestMarshal(t *testing.T) {
 	cases := []MarshalCase{
 		{
 			s: State{
-				heat: 56,
-			},
+			    
+            },
 			proto: &pb.GameState{},
 			want: &pb.GameState{
-				HeatState: &pb.HeatState{
-					Heat: proto.Int32(56),
-				},
+				ProvincesState: &pb.ProvincesState{
+					ProvinceStates: []*pb.ProvinceState{
+						&pb.ProvinceState{
+							Id:        pb.ProvinceId_ROMANIA.Enum(),
+							Influence: proto.Int32(-1),
+							Gov:       pb.Government_COMMUNISM.Enum(),
+							// No occupier
+							Leader: proto.String("David Mihai"),
+						}},
+                },
 			},
 			err: false,
 		},
@@ -138,6 +144,7 @@ func TestMarshal(t *testing.T) {
 	}
 }
 
+/*
 func TestMechanic(t *testing.T) {
 	settingsProto := &pb.GameSettings{
 		HeatSettings: &pb.HeatSettings{
