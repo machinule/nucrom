@@ -1,6 +1,7 @@
 package heat
 
 import (
+    "errors"
 	"fmt"
 	pb "github.com/machinule/nucrom/proto/gen"
 )
@@ -13,7 +14,19 @@ type Settings struct {
 }
 
 func validate(settingsProto *pb.GameSettings) error {
-	// There cannot be any errors in configuring the heat mechanic, as the default is appropriate.
+    if settingsProto.HeatSettings == nil {
+        return errors.New("Could not find heat settings in game settings")
+    }
+    heatSettings := settingsProto.HeatSettings
+	if heatSettings.Min >= heatSettings.Mxm {
+        return errors.New(fmt.Sprintf("Heat minimum larger than maximum - min: ", heatSettings.Min, ", mxm: ", heatSettings.Mxm))
+    }
+    if heatSettings.Init >= heatSettings.Mxm {
+        return errors.New(fmt.Sprintf("Heat init set to at or above maximum - mxm: ", heatSettings.Mxm, ", init: ", heatSettings.Init))
+    }
+    if heatSettings.Init < heatSettings.Min {
+        return errors.New(fmt.Sprintf("Heat init set to below minimum - min: ", heatSettings.Min, ", init: ", heatSettings.Init))
+    }
 	return nil
 }
 

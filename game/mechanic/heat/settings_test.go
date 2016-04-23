@@ -18,11 +18,11 @@ func TestNewSettings(t *testing.T) {
 	cases := []NewSettingsCase{
 		{
 			proto: &pb.GameSettings{},
-			init:  0, // No default
+			init:  0,
 			min:   0,
 			mxm:   100,
-			decay: 0, // No default
-			err:   false,
+			decay: 0,
+			err:   true,
 		},
 		{
 			proto: &pb.GameSettings{
