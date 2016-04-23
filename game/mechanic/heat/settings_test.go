@@ -27,6 +27,18 @@ func TestNewSettings(t *testing.T) {
 		{
 			proto: &pb.GameSettings{
 				HeatSettings: &pb.HeatSettings{
+					Mxm: 50,
+				},
+			},
+			init:  0,
+			min:   0,
+			mxm:   50,
+			decay: 0,
+			err:   false,
+		},
+		{
+			proto: &pb.GameSettings{
+				HeatSettings: &pb.HeatSettings{
 					Init:  50,
 					Min:   0,
 					Mxm:   100,
@@ -40,33 +52,33 @@ func TestNewSettings(t *testing.T) {
 			err:   false,
 		},
 	}
-	for _, tc := range cases {
+	for index, tc := range cases {
 		s, err := NewSettings(tc.proto)
 		if got, want := err != nil, tc.err; got != want {
 			msg := map[bool]string{
 				true:  "error",
 				false: "no error",
 			}
-			t.Errorf("err: got %s, want %s", msg[got], msg[want])
+			t.Errorf("case %d - err: got %s, want %s", index, msg[got], msg[want])
 			continue
 		}
 		if tc.err {
 			continue
 		}
 		if got, want := s.init, tc.init; got != want {
-			t.Errorf("init: got %d, want %d", got, want)
+			t.Errorf("case %d - init: got %d, want %d", index, got, want)
 		}
 		if got, want := s.min, tc.min; got != want {
-			t.Errorf("min: got %d, want %d", got, want)
+			t.Errorf("case %d - imin: got %d, want %d", index, got, want)
 		}
 		if got, want := s.mxm, tc.mxm; got != want {
-			t.Errorf("mxm: got %d, want %d", got, want)
+			t.Errorf("case %d - imxm: got %d, want %d", index, got, want)
 		}
 		if got, want := s.min, tc.min; got != want {
-			t.Errorf("min: got %d, want %d", got, want)
+			t.Errorf("case %d - imin: got %d, want %d", index, got, want)
 		}
 		if got, want := s.decay, tc.decay; got != want {
-			t.Errorf("decay: got %d, want %d", got, want)
+			t.Errorf("case %d - idecay: got %d, want %d", index, got, want)
 		}
 	}
 }
