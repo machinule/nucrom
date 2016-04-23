@@ -19,14 +19,16 @@ message ProvinceSettings {
   string label = 2;
   repeated ProvinceId adjacency = 3;
   int32 stability_base = 4;
+  Region region = 10;
+  // Culture culture = 11;
+  bool coastal = 12;
+  
+  // Initialization
   int32 init_influence = 5;
   Government init_government = 6;
   ProvinceId init_occupier = 7;
   string init_leader = 8;
-  //Dissidents init_dissidents = 9;
-  Region region = 10;
-  //Culture culture = 11;
-  bool coastal = 12;
+  Dissidents init_dissidents = 9;
 }
 
 // ========== State ==========
