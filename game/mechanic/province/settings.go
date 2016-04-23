@@ -40,16 +40,16 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 	// Contains map of all individual province settings
 	provs := make(map[pb.ProvinceId]*ProvSettings)
 	for _, p := range settingsProto.GetProvincesSettings().GetProvinceSettings() {
-		provs[p.GetId()] = &ProvSettings{
-			id:              p.GetId(),
-			label:           p.GetLabel(),
-			adjacencies:     p.GetAdjacency(),
-			stability_base:  p.GetStabilityBase(),
-			region:          p.GetRegion(),
-			coastal:         p.GetCoastal(),
-			init_influence:  p.GetInitInfluence(),
-			init_government: p.GetInitGovernment(),
-			init_leader:     p.GetInitLeader(),
+		provs[p.Id] = &ProvSettings{
+			id:              p.Id,
+			label:           p.Label,
+			adjacencies:     p.Adjacency,
+			stability_base:  p.StabilityBase,
+			region:          p.Region,
+			coastal:         p.Coastal,
+			init_influence:  p.InitInfluence,
+			init_government: p.InitGovernment,
+			init_leader:     p.InitLeader,
 		}
 	}
 

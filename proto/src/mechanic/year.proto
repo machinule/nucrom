@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -8,7 +8,7 @@ package pb;
 // Immutable over the duration of a single game.
 
 message YearSettings {
-  optional int32 init_year = 1 [default=1948];
+  int32 init_year = 1;
 }
 
 // ========== State ==========
@@ -17,5 +17,5 @@ message YearSettings {
 // Mutated each turn based on moves.
 
 message YearState {
-  optional int32 year = 1;
+  int32 year = 1;
 }

@@ -1,7 +1,6 @@
 package province
 
 import (
-	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -27,15 +26,15 @@ func TestNewSettings(t *testing.T) {
 				ProvincesSettings: &pb.ProvincesSettings{
 					ProvinceSettings: []*pb.ProvinceSettings{
 						&pb.ProvinceSettings{
-							Id:             pb.ProvinceId_ROMANIA.Enum(),
-							Label:          proto.String("Romania"),
+							Id:             pb.ProvinceId_ROMANIA,
+							Label:          "Romania",
 							Adjacency:      []pb.ProvinceId{pb.ProvinceId_P_USSR, pb.ProvinceId_HUNGARY},
-							StabilityBase:  proto.Int32(2),
-							Region:         pb.Region_EASTERN_EUROPE.Enum(),
-							Coastal:        proto.Bool(false),
-							InitInfluence:  proto.Int32(-1),
-							InitGovernment: pb.Government_COMMUNISM.Enum(),
-							InitLeader:     proto.String("David Mihai"),
+							StabilityBase:  2,
+							Region:         pb.Region_EASTERN_EUROPE,
+							Coastal:        false,
+							InitInfluence:  -1,
+							InitGovernment: pb.Government_COMMUNISM,
+							InitLeader:     "David Mihai",
 						},
 					},
 				},

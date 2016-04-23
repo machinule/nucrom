@@ -1,14 +1,17 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
 enum Player {
+  UNKNOWN_PLAYER = 0;
   USSR = 1;
   USA = 2;
   NEITHER = 3;
 }
 
 enum Government {
+  UNKNOWN_GOVERNMENT = 0;
+  
   WEAK = 1;
   DEMOCRACY = 2;
   COMMUNISM = 3;
@@ -18,6 +21,8 @@ enum Government {
 }
 
 enum Region {
+  UNKNOWN_REGION = 0;
+
   WESTERN_EUROPE = 1;
   EASTERN_EUROPE = 2;
   CENTRAL_AMERICA = 3;
@@ -141,6 +146,8 @@ enum ProvinceId {
 }
 
 enum Culture {
+  UNKNOWN_CULTURE = 0;
+  
   ENGLISH = 1;
   SPANISH = 2;
   FRENCH = 3;
