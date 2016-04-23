@@ -1,7 +1,6 @@
 package year
 
 import (
-	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -24,7 +23,7 @@ func TestNewSettings(t *testing.T) {
 		{
 			proto: &pb.GameSettings{
 				YearSettings: &pb.YearSettings{
-					InitYear: proto.Int32(43),
+					InitYear: 43,
 				},
 			},
 			init: 43,

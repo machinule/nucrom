@@ -18,7 +18,7 @@ func TestNewState(t *testing.T) {
 		{
 			proto: &pb.GameState{
 				HeatState: &pb.HeatState{
-					Heat: proto.Int32(45),
+					Heat: 45,
 				},
 			},
 			prev: &State{
@@ -30,7 +30,7 @@ func TestNewState(t *testing.T) {
 		{
 			proto: &pb.GameState{
 				HeatState: &pb.HeatState{
-					Heat: proto.Int32(45),
+					Heat: 45,
 				},
 			},
 			prev: nil,
@@ -75,7 +75,7 @@ func TestMarshal(t *testing.T) {
 			proto: &pb.GameState{},
 			want: &pb.GameState{
 				HeatState: &pb.HeatState{
-					Heat: proto.Int32(56),
+					Heat: 56,
 				},
 			},
 			err: false,
@@ -110,10 +110,10 @@ func TestMarshal(t *testing.T) {
 func TestMechanic(t *testing.T) {
 	settingsProto := &pb.GameSettings{
 		HeatSettings: &pb.HeatSettings{
-			Init:  proto.Int32(70),
-			Min:   proto.Int32(0),
-			Mxm:   proto.Int32(100),
-			Decay: proto.Int32(5),
+			Init:  70,
+			Min:   0,
+			Mxm:   100,
+			Decay: 5,
 		},
 	}
 	set, err := NewSettings(settingsProto)

@@ -3,7 +3,6 @@ package year
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/proto"
 	"github.com/machinule/nucrom/proto/gen"
 )
 
@@ -16,11 +15,14 @@ type State struct {
 // NewState creates a new state from the GameState message and the previous state.
 func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
 	if prev == nil {
-		return nil, fmt.Errorf("recieved nil previous state, unable to propogate settings.")
+		return nil, fmt.Errorf("received nil previous state, unable to propogate settings.")
+	}
+	if stateProto.GetYearState() == nil {
+		return nil, fmt.Errorf("received nil YearState, unable to continue.")
 	}
 	return &State{
 		settings: prev.settings,
-		year:     stateProto.GetYearState().GetYear(),
+		year:     stateProto.GetYearState().Year,
 	}, nil
 }
 
@@ -30,7 +32,7 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 		return fmt.Errorf("attempting to fill in nil GameState proto.")
 	}
 	stateProto.YearState = &pb.YearState{
-		Year: proto.Int32(s.year),
+		Year: s.year,
 	}
 	return nil
 }

@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -8,10 +8,10 @@ package pb;
 // Immutable over the duration of a single game.
 
 message HeatSettings {
-  optional int32 init = 1;
-  optional int32 min = 2 [default=0];
-  optional int32 mxm = 3 [default=100];  // Maximum.
-  optional int32 decay = 4;
+  int32 init = 1;
+  int32 min = 2;
+  int32 mxm = 3;  // Maximum.
+  int32 decay = 4;
 }
 
 // ========== State ==========
@@ -20,5 +20,5 @@ message HeatSettings {
 // Mutated each turn based on moves.
 
 message HeatState {
-  optional int32 heat = 1;
+  int32 heat = 1;
 }

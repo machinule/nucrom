@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -15,18 +15,18 @@ message ProvincesSettings {
 }
 
 message ProvinceSettings {
-  optional ProvinceId id = 1;
-  optional string label = 2;
+  ProvinceId id = 1;
+  string label = 2;
   repeated ProvinceId adjacency = 3;
-  optional int32 stability_base = 4 [default = 1];
-  optional int32 init_influence = 5 [default = 0];
-  optional Government init_government = 6 [default = WEAK];
-  optional ProvinceId init_occupier = 7 [default = NONE];
-  optional string init_leader = 8;
-  //optional Dissidents init_dissidents = 9;
-  optional Region region = 10;
-  //optional Culture culture = 11;
-  optional bool coastal = 12 [default = false];
+  int32 stability_base = 4;
+  int32 init_influence = 5;
+  Government init_government = 6;
+  ProvinceId init_occupier = 7;
+  string init_leader = 8;
+  //Dissidents init_dissidents = 9;
+  Region region = 10;
+  //Culture culture = 11;
+  bool coastal = 12;
 }
 
 // ========== State ==========
@@ -39,10 +39,10 @@ message ProvincesState {
 }
 
 message ProvinceState {
-  optional ProvinceId id = 1;
-  optional int32 influence = 2;
-  optional Government gov = 3;
-  optional ProvinceId occupier = 4;
-  optional string leader = 5;
-  optional Dissidents dissidents = 6;
+  ProvinceId id = 1;
+  int32 influence = 2;
+  Government gov = 3;
+  ProvinceId occupier = 4;
+  string leader = 5;
+  Dissidents dissidents = 6;
 }

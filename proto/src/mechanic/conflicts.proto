@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -8,6 +8,7 @@ import "dissidents.proto";
 // ========== Ids ==========
 
 enum ConflictType {
+  UNKNOWN_CONFLICT = 0;
   CIVIL_WAR = 1;
   CONVENTIONAL_WAR = 2;
   MILITARY_ACTION = 3;
@@ -40,19 +41,19 @@ message ConflictsState {
 
 // The state for a single Conflict.
 message ConflictState {
-  optional string name = 1 [default = "War"];
-  optional ProvinceId location = 15;
-  optional ConflictType type = 2;
-  optional int32 goal = 3 [default = 1];
-  optional int32 defender_progress = 4 [default = 0];
-  optional int32 attacker_progress = 5 [default = 0];
-  optional Dissidents rebels = 6;
+  string name = 1;
+  ProvinceId location = 15;
+  ConflictType type = 2;
+  int32 goal = 3;
+  int32 defender_progress = 4;
+  int32 attacker_progress = 5;
+  Dissidents rebels = 6;
   repeated ProvinceId attacker = 7;
-  optional ProvinceId defender = 8;
-  optional int32 length = 9 [default = -1];
-  optional ProvinceId attacker_supporter = 10;
-  optional ProvinceId defender_supporter = 11;
-  optional int32 base_chance = 12 [default = 200000]; // Base chance
-  optional int32 att_chance_mod = 13 [default = 000000];
-  optional int32 def_chance_mod = 14 [default = 000000];
+  ProvinceId defender = 8;
+  int32 length = 9;
+  ProvinceId attacker_supporter = 10;
+  ProvinceId defender_supporter = 11;
+  int32 base_chance = 12; // Base chance
+  int32 att_chance_mod = 13;
+  int32 def_chance_mod = 14;
 }

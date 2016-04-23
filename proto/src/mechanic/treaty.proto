@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -19,36 +19,36 @@ message TreatySettings {
 
 message TreatyState {
   repeated Treaty ratified_treaty = 1;
-  optional Treaty proposed_treaty = 2;
-  optional AvailableTermList available_ussr_terms = 3;
-  optional AvailableTermList available_usa_terms = 4;
-  optional AvailableTermList available_neutral_terms = 5;
+  Treaty proposed_treaty = 2;
+  AvailableTermList available_ussr_terms = 3;
+  AvailableTermList available_usa_terms = 4;
+  AvailableTermList available_neutral_terms = 5;
 }
 
 message ProvinceSpec {
-  optional ProvinceId id = 2;
+  ProvinceId id = 2;
 }
 
 message RegionSpec {
-  optional Region id = 1;
+  Region id = 1;
 }
 
 message RegionalCoupBanTerm {
-  optional Region region = 1;
+  Region region = 1;
 }
 
 message Term {
-  optional RegionalCoupBanTerm regional_coup_ban_term = 1;
+  RegionalCoupBanTerm regional_coup_ban_term = 1;
 }
 
 // Effects that occur when the treaty is passed, in addition to the terms.
 message TreatyEffects {
-  optional int32 heat_modifier = 1;
+  int32 heat_modifier = 1;
 }
 
 message Treaty {
   repeated Term term = 1;
-  optional TreatyEffects treaty_effects = 2;
+  TreatyEffects treaty_effects = 2;
 }
 
 message AvailableTermList {
@@ -67,13 +67,13 @@ message TreatyAmendment {
 // The top-level moves proto included in Moves.
 
 message TreatyMechanicMove {
-  optional RatifyMove ratify_move = 1;
-  optional AmendMove amend_move = 2;
+  RatifyMove ratify_move = 1;
+  AmendMove amend_move = 2;
 }
 
 message RatifyMove {
 }
 
 message AmendMove {
-  optional TreatyAmendment treaty_delta = 1;
+  TreatyAmendment treaty_delta = 1;
 }
