@@ -1,7 +1,6 @@
 package heat
 
 import (
-	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -28,10 +27,10 @@ func TestNewSettings(t *testing.T) {
 		{
 			proto: &pb.GameSettings{
 				HeatSettings: &pb.HeatSettings{
-					Init:  proto.Int32(50),
-					Min:   proto.Int32(0),
-					Mxm:   proto.Int32(100),
-					Decay: proto.Int32(5),
+					Init:  50,
+					Min:   0,
+					Mxm:   100,
+					Decay: 5,
 				},
 			},
 			init:  50,

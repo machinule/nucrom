@@ -21,11 +21,19 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 	if err := validate(settingsProto); err != nil {
 		return nil, fmt.Errorf("validating settings proto: %e", err)
 	}
+	if settingsProto.GetHeatSettings() == nil {
+		return &Settings{
+			init:  0,
+			min:   0,
+			mxm:   100,
+			decay: 0,
+		}, nil
+	}
 	return &Settings{
-		init:  settingsProto.GetHeatSettings().GetInit(),
-		min:   settingsProto.GetHeatSettings().GetMin(),
-		mxm:   settingsProto.GetHeatSettings().GetMxm(),
-		decay: settingsProto.GetHeatSettings().GetDecay(),
+		init:  settingsProto.GetHeatSettings().Init,
+		min:   settingsProto.GetHeatSettings().Min,
+		mxm:   settingsProto.GetHeatSettings().Mxm,
+		decay: settingsProto.GetHeatSettings().Decay,
 	}, nil
 }
 

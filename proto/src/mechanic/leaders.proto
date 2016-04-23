@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -14,13 +14,13 @@ message LeadersSettings {
 }
 
 message LeaderSettings {
-  optional string name = 1;
-  optional int32 birth_year = 2;
-  optional int32 start_year = 3;
-  optional int32 end_year = 4;
-  optional Culture culture = 5;
+  string name = 1;
+  int32 birth_year = 2;
+  int32 start_year = 3;
+  int32 end_year = 4;
+  Culture culture = 5;
   repeated ProvinceId provinces = 6;
-  optional bool elected = 8;
+  bool elected = 8;
 }
 
 // ========== State ==========
@@ -35,6 +35,6 @@ message LeadersState {
 }
 
 message LeaderState {
-  optional string name = 1;
-  optional ProvinceId province = 2 [default = NONE]; // Only if currently leading; NONE for dissidents
+  string name = 1;
+  ProvinceId province = 2; // Only if currently leading; NONE for dissidents
 }

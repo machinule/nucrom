@@ -21,8 +21,14 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 	if err := validate(settingsProto); err != nil {
 		return nil, fmt.Errorf("validating settings proto: %e", err)
 	}
+	if settingsProto.GetYearSettings() == nil {
+		return &Settings{
+			init: 1948,
+			incr: 1,
+		}, nil
+	}
 	return &Settings{
-		init: settingsProto.GetYearSettings().GetInitYear(),
+		init: settingsProto.GetYearSettings().InitYear,
 		incr: 1,
 	}, nil
 }

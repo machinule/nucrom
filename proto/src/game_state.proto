@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -13,13 +13,13 @@ import "victory.proto";
 import "year.proto";
 
 message GameState {
-  optional ConflictsState conflicts_state = 1;
-  optional HeatState heat_state = 2;
-  optional LeadersState leaders_state = 3;
-  optional PointsState points_state = 4;
-  optional ProvincesState provinces_state = 5;
-  optional PseudorandomState pseudorandom_state = 6;
-  optional TreatyState treaty_state = 7;
-  optional VictoryState victory_state = 8;
-  optional YearState year_state = 9;
+  ConflictsState conflicts_state = 1;
+  HeatState heat_state = 2;
+  LeadersState leaders_state = 3;
+  PointsState points_state = 4;
+  ProvincesState provinces_state = 5;
+  PseudorandomState pseudorandom_state = 6;
+  TreatyState treaty_state = 7;
+  VictoryState victory_state = 8;
+  YearState year_state = 9;
 }

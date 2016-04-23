@@ -1,7 +1,6 @@
 package province
 
 import (
-	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -24,11 +23,11 @@ func TestNewState(t *testing.T) {
 				ProvincesState: &pb.ProvincesState{
 					ProvinceStates: []*pb.ProvinceState{
 						&pb.ProvinceState{
-							Id:        pb.ProvinceId_ROMANIA.Enum(),
-							Influence: proto.Int32(-1),
-							Gov:       pb.Government_COMMUNISM.Enum(),
+							Id:        pb.ProvinceId_ROMANIA,
+							Influence: -1,
+							Gov:       pb.Government_COMMUNISM,
 							// No occupier
-							Leader: proto.String("David Mihai"),
+							Leader: "David Mihai",
 						},
 					},
 				},
@@ -56,11 +55,11 @@ func TestNewState(t *testing.T) {
 				ProvincesState: &pb.ProvincesState{
 					ProvinceStates: []*pb.ProvinceState{
 						&pb.ProvinceState{
-							Id:        pb.ProvinceId_ROMANIA.Enum(),
-							Influence: proto.Int32(-1),
-							Gov:       pb.Government_COMMUNISM.Enum(),
+							Id:        pb.ProvinceId_ROMANIA,
+							Influence: -1,
+							Gov:       pb.Government_COMMUNISM,
 							// No occupier
-							Leader: proto.String("David Mihai"),
+							Leader: "David Mihai",
 						}},
 				},
 			},

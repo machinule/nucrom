@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 package pb;
 
@@ -8,7 +8,7 @@ package pb;
 // Immutable over the duration of a single game.
 
 message PseudorandomSettings {
-  optional int64 init_seed = 1;
+  int64 init_seed = 1;
 }
 
 // ========== State ==========
@@ -17,5 +17,5 @@ message PseudorandomSettings {
 // Mutated each turn based on moves.
 
 message PseudorandomState {
-  optional int64 seed = 1;
+  int64 seed = 1;
 }
