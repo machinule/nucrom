@@ -41,14 +41,27 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 	if stateProto.GetProvincesState() == nil {
 		stateProto.ProvincesState = &pb.ProvincesState{}
 	}
-	// TODO: Populate fields into new GameState
+	var provs []*pb.ProvinceState
+	for _, p := range s.Provinces {
+		provs = append(provs, &pb.ProvinceState{
+			Id:        p.Id(),
+			Influence: p.Infl(),
+			Gov:       p.Gov(),
+			Occupier:  p.Occupier(),
+			Leader:    p.Leader(),
+			//TODO: Dissidents: p.Dissidents(),
+		})
+	}
+	stateProto.ProvincesState = &pb.ProvincesState{
+		ProvinceStates: provs,
+	}
 	return nil
 }
 
 // GETTERS
 
 func (s *State) Settings() *Settings {
-    return s.settings
+	return s.settings
 }
 
 func (s *State) Get(id pb.ProvinceId) *ProvState {

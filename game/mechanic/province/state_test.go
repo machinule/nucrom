@@ -1,6 +1,7 @@
 package province
 
 import (
+	"github.com/golang/protobuf/proto"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -100,26 +101,43 @@ func TestMarshal(t *testing.T) {
 	cases := []MarshalCase{
 		{
 			s: State{
-			    
-            },
+				Provinces: map[pb.ProvinceId]*ProvState{
+					pb.ProvinceId_ROMANIA: &ProvState{
+						id:         pb.ProvinceId_ROMANIA,
+						influence:  -1,
+						government: pb.Government_COMMUNISM,
+						// No occupier
+						leader: "David Mihai",
+					},
+				},
+			},
 			proto: &pb.GameState{},
 			want: &pb.GameState{
 				ProvincesState: &pb.ProvincesState{
 					ProvinceStates: []*pb.ProvinceState{
 						&pb.ProvinceState{
-							Id:        pb.ProvinceId_ROMANIA.Enum(),
-							Influence: proto.Int32(-1),
-							Gov:       pb.Government_COMMUNISM.Enum(),
+							Id:        pb.ProvinceId_ROMANIA,
+							Influence: -1,
+							Gov:       pb.Government_COMMUNISM,
 							// No occupier
-							Leader: proto.String("David Mihai"),
-						}},
-                },
+							Leader: "David Mihai",
+						},
+					},
+				},
 			},
 			err: false,
 		},
 		{
 			s: State{
-				heat: 56,
+				Provinces: map[pb.ProvinceId]*ProvState{
+					pb.ProvinceId_ROMANIA: &ProvState{
+						id:         pb.ProvinceId_ROMANIA,
+						influence:  -1,
+						government: pb.Government_COMMUNISM,
+						// No occupier
+						leader: "David Mihai",
+					},
+				},
 			},
 			proto: nil,
 			err:   true,
