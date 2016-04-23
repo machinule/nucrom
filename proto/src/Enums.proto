@@ -2,6 +2,12 @@ syntax = "proto2";
 
 package pb;
 
+enum Player {
+  USSR = 1;
+  USA = 2;
+  NEITHER = 3;
+}
+
 enum Government {
   WEAK = 1;
   DEMOCRACY = 2;
@@ -130,8 +136,8 @@ enum ProvinceId {
   NORTH_KOREA = 148;
 
   // SUPERPOWERS
-  USA = 998;
-  USSR = 999;
+  P_USA = 998;
+  P_USSR = 999;
 }
 
 enum Culture {

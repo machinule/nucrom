@@ -1,4 +1,4 @@
-// The province mechanic keeps track of the provinces that make up the world map
+// This is the state for the province mechanic, including the states of each individual province
 package province
 
 import (
@@ -46,6 +46,10 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 }
 
 // GETTERS
+
+func (s *State) Settings() *Settings {
+    return s.settings
+}
 
 func (s *State) Get(id pb.ProvinceId) *ProvState {
 	return s.Provinces[id]
