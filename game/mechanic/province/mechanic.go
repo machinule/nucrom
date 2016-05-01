@@ -65,15 +65,15 @@ func (s *State) IsAllied(id pb.ProvinceId, player pb.Player) bool {
 
 // Applys influence on a province
 func (s *State) Infl(id pb.ProvinceId, player pb.Player, magnitude int32) {
-    s.Get(id).ApplyInfl(player, magnitude)
+	s.Get(id).ApplyInfl(player, magnitude)
 }
 
 // Sets the government of a province
 func (s *State) SetGov(id pb.ProvinceId, gov pb.Government) {
-    s.Get(id).SetGov(gov)
+	s.Get(id).SetGov(gov)
 }
 
 // Sets the leader of a province ("" string for no leader)
 func (s *State) SetLeader(id pb.ProvinceId, name string) {
-    s.Get(id).SetLeader(name)
+	s.Get(id).SetLeader(name)
 }

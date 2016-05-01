@@ -91,17 +91,17 @@ func (s *ProvState) Leader() string {
 // SETTERS
 
 func (s *ProvState) ApplyInfl(player pb.Player, magnitude int32) {
-    delta := magnitude
-    if player == pb.Player_USSR {
-        delta = delta * -1
-    }
-    s.influence = s.influence + delta
+	delta := magnitude
+	if player == pb.Player_USSR {
+		delta = delta * -1
+	}
+	s.influence = s.influence + delta
 }
 
 func (s *ProvState) SetGov(gov pb.Government) {
-    s.government = gov
+	s.government = gov
 }
 
 func (s *ProvState) SetLeader(name string) {
-    s.leader = name
+	s.leader = name
 }
