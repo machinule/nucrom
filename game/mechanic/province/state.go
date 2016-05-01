@@ -87,3 +87,21 @@ func (s *ProvState) Occupier() pb.ProvinceId {
 func (s *ProvState) Leader() string {
 	return s.leader
 }
+
+// SETTERS
+
+func (s *ProvState) ApplyInfl(player pb.Player, magnitude int32) {
+    delta := magnitude
+    if player == pb.Player_USSR {
+        delta = delta * -1
+    }
+    s.influence = s.influence + delta
+}
+
+func (s *ProvState) SetGov(gov pb.Government) {
+    s.government = gov
+}
+
+func (s *ProvState) SetLeader(name string) {
+    s.leader = name
+}

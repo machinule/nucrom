@@ -24,6 +24,7 @@ func (s *State) GetNetStability(id pb.ProvinceId) int32 {
 	return s.Settings().Get(id).BaseStability() + s.GetStabilityMod(id)
 }
 
+// Get the stability modifiers that are affecting the province (independent of base stability)
 func (s *State) GetStabilityMod(id pb.ProvinceId) int32 {
 	var mod int32 = 0
 	gov := s.Get(id).Gov()
@@ -39,21 +40,40 @@ func (s *State) GetStabilityMod(id pb.ProvinceId) int32 {
 	return mod
 }
 
+// Gets superpower ally of province; returns neither if applicable
 func (s *State) GetAlly(id pb.ProvinceId) pb.Player {
 	net_stab := s.GetNetStability(id)
 	infl := s.Get(id).Infl()
-	if infl > net_stab {
+	if infl >= net_stab {
 		return pb.Player_USA
-	} else if infl < -net_stab {
+	} else if infl <= -net_stab {
 		return pb.Player_USSR
 	} else {
 		return pb.Player_NEITHER
 	}
 }
 
+// Checks if province currently has a superpower ally
 func (s *State) IsAllied(id pb.ProvinceId, player pb.Player) bool {
 	if s.GetAlly(id) == player {
 		return true
 	}
 	return false
+}
+
+// ACTIONS
+
+// Applys influence on a province
+func (s *State) Infl(id pb.ProvinceId, player pb.Player, magnitude int32) {
+    s.Get(id).ApplyInfl(player, magnitude)
+}
+
+// Sets the government of a province
+func (s *State) SetGov(id pb.ProvinceId, gov pb.Government) {
+    s.Get(id).SetGov(gov)
+}
+
+// Sets the leader of a province ("" string for no leader)
+func (s *State) SetLeader(id pb.ProvinceId, name string) {
+    s.Get(id).SetLeader(name)
 }
