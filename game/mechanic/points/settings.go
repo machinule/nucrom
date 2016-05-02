@@ -33,20 +33,20 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 	if settingsProto.GetPointsSettings() == nil {
 		return &Settings{
 			usa: PointSettings{
-				pol_init:   5,
-				pol_income: 5,
-				mil_init:   5,
-				mil_income: 5,
-				cov_init:   3,
-				cov_income: 3,
+				pol_init:   0,
+				pol_income: 0,
+				mil_init:   0,
+				mil_income: 0,
+				cov_init:   0,
+				cov_income: 0,
 			},
 			ussr: PointSettings{
-				pol_init:   5,
-				pol_income: 5,
-				mil_init:   5,
-				mil_income: 5,
-				cov_init:   3,
-				cov_income: 3,
+				pol_init:   0,
+				pol_income: 0,
+				mil_init:   0,
+				mil_income: 0,
+				cov_init:   0,
+				cov_income: 0,
 			},
 		}, nil
 	}

@@ -64,3 +64,27 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 }
 
 // GETTERS
+
+func (s *State) POL(player pb.Player) int32 {
+	if player == pb.Player_USSR {
+		return s.ussr.pol
+	} else {
+		return s.usa.pol
+	}
+}
+
+func (s *State) MIL(player pb.Player) int32 {
+	if player == pb.Player_USSR {
+		return s.ussr.mil
+	} else {
+		return s.usa.mil
+	}
+}
+
+func (s *State) COV(player pb.Player) int32 {
+	if player == pb.Player_USSR {
+		return s.ussr.cov
+	} else {
+		return s.usa.cov
+	}
+}
