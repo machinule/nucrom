@@ -7,7 +7,6 @@ import "game_settings.proto";
 import "game_state.proto";
 
 message JoinGameRequest {
-  Player preferred_player = 1;
 }
 
 message JoinGameResponse {
@@ -16,8 +15,7 @@ message JoinGameResponse {
 }
 
 message GetGameStateRequest {
-  // If specified, return the game state on the specified turn. If the turn is incomplete, an RPC Application error will be returned.
-  int32 at_turn = 1;
+  bool return_turn_only = 1;
 }
 
 message TurnState {
