@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package pb;
+
+import "enums.proto";
+import "game_settings.proto";
+import "game_state.proto";
+
+message JoinGameRequest {
+  Player preferred_player = 1;
+}
+
+message JoinGameResponse {
+  Player player = 1;
+  GameSettings settings = 2;
+}
+
+message GetGameStateRequest {
+  // If specified, return the game state on the specified turn. If the turn is incomplete, an RPC Application error will be returned.
+  int32 at_turn = 1;
+}
+
+message TurnState {
+  int32 index = 1;
+  repeated Player moved = 2;
+}
+
+message GetGameStateResponse {
+  TurnState turn = 1;
+  GameState state = 2;
+}
+
+message SetTurnRequest {
+  Player player = 1;
+}
+
+message SetTurnResponse {
+}
+
+service GameService {
+  rpc JoinGame(JoinGameRequest) returns (JoinGameResponse) {}
+  rpc GetGameState(GetGameStateRequest) returns (GetGameStateResponse) {}
+  rpc SetTurn(SetTurnRequest) returns (SetTurnResponse) {}
+}
