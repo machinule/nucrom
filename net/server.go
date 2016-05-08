@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-// gameServer contains the state of the game, and implements the GameService.
-type gameServer struct {
+// GameServer contains the state of the game, and implements the GameService.
+type GameServer struct {
 	settings *pb.GameSettings
 
 	lock    sync.RWMutex
@@ -17,11 +17,11 @@ type gameServer struct {
 	players <-chan pb.Player
 }
 
-func New(s *pb.GameSettings) (*gameServer, error) {
-	p := make(chan pb.Player)
+func NewServer(s *pb.GameSettings) (*GameServer, error) {
+	p := make(chan pb.Player, 2)
 	p <- pb.Player_USA
 	p <- pb.Player_USSR
-	return &gameServer{
+	return &GameServer{
 		settings: s,
 		state:    nil,
 		turn: &pb.TurnState{
@@ -32,7 +32,7 @@ func New(s *pb.GameSettings) (*gameServer, error) {
 	}, nil
 }
 
-func (s *gameServer) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb.JoinGameResponse, error) {
+func (s *GameServer) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb.JoinGameResponse, error) {
 	p, ok := <-s.players
 	if !ok {
 		return nil, fmt.Errorf("No more player slots available.")
@@ -43,7 +43,7 @@ func (s *gameServer) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb
 	}, nil
 }
 
-func (s *gameServer) GetGameState(ctx context.Context, req *pb.GetGameStateRequest) (*pb.GetGameStateResponse, error) {
+func (s *GameServer) GetGameState(ctx context.Context, req *pb.GetGameStateRequest) (*pb.GetGameStateResponse, error) {
 	s.lock.RLock()
 	defer s.lock.RUnlock()
 	resp := &pb.GetGameStateResponse{
@@ -56,6 +56,6 @@ func (s *gameServer) GetGameState(ctx context.Context, req *pb.GetGameStateReque
 	return resp, nil
 }
 
-func (s *gameServer) SetTurn(ctx context.Context, req *pb.SetTurnRequest) (*pb.SetTurnResponse, error) {
+func (s *GameServer) SetTurn(ctx context.Context, req *pb.SetTurnRequest) (*pb.SetTurnResponse, error) {
 	return &pb.SetTurnResponse{}, nil
 }
