@@ -11,7 +11,6 @@ import (
 	pb "github.com/machinule/nucrom/proto/gen"
 	"github.com/turret-io/go-menu/menu"
 	"google.golang.org/grpc"
-	"time"
 )
 
 type game struct {
@@ -35,7 +34,7 @@ func (g *game) netHost(_ ...string) error {
 	g.startServer(":7754")
 	client, _ := gamenet.NewClient("localhost:7754")
 	defer client.Close()
-	time.Sleep(10 * time.Second)
+	client.Join()
 	return nil
 }
 
@@ -46,6 +45,7 @@ func (g *game) netConnect(_ ...string) error {
 	fmt.Sscanln("%s", &hostport)
 	client, _ := gamenet.NewClient(hostport)
 	defer client.Close()
+	client.Join()
 	return nil
 }
 
@@ -56,6 +56,8 @@ func (g *game) hotseat(_ ...string) error {
 	defer firstClient.Close()
 	secondClient, _ := gamenet.NewClient("localhost:7754")
 	defer secondClient.Close()
+	firstClient.Join()
+	secondClient.Join()
 
 	return nil
 }
