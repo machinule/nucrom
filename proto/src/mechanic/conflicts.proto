@@ -20,13 +20,9 @@ enum ConflictType {
 // The top-level settings proto included in GameSettings.
 // Immutable over the duration of a single game.
 message ConflictsSettings {
-  repeated ConflictState init_active = 1;
-  repeated ConflictState init_dormant = 2;
-  repeated ConflictState init_possible = 3;
-}
-
-// Settings for a single conflict.
-message ConflictSettings {
+  repeated Conflict init_active = 1;
+  repeated Conflict init_dormant = 2;
+  repeated Conflict init_possible = 3;
 }
 
 // ========== State ==========
@@ -34,26 +30,26 @@ message ConflictSettings {
 // The top-level state proto included in GameState.
 // Mutated each turn based on moves.
 message ConflictsState {
-  repeated ConflictState active = 1;
-  repeated ConflictState dormant = 2;
-  repeated ConflictState possible = 3;
+  repeated Conflict active = 1;
+  repeated Conflict dormant = 2;
+  repeated Conflict possible = 3;
 }
 
 // The state for a single Conflict.
-message ConflictState {
+message Conflict {
   string name = 1;
-  ProvinceId location = 15;
   ConflictType type = 2;
   int32 goal = 3;
-  int32 defender_progress = 4;
-  int32 attacker_progress = 5;
-  Dissidents rebels = 6;
-  repeated ProvinceId attacker = 7;
-  ProvinceId defender = 8;
-  int32 length = 9;
-  ProvinceId attacker_supporter = 10;
-  ProvinceId defender_supporter = 11;
-  int32 base_chance = 12; // Base chance
-  int32 att_chance_mod = 13;
-  int32 def_chance_mod = 14;
+  Faction attackers = 4;
+  Faction defenders = 5;
+  int32 length = 6;
+  int32 base_chance = 7; // Base chance
+  repeated ProvinceId locations = 8;
+}
+
+message Faction {
+  repeated ProvinceId ids = 1;
+  Player supporter = 2; // US or USSR or Neither
+  int32 progress = 3;
+  Dissidents rebels = 4;
 }

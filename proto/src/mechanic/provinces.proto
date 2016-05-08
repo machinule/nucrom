@@ -4,6 +4,7 @@ package pb;
 
 import "enums.proto";
 import "dissidents.proto";
+import "conflicts.proto";
 
 // ========== Settings ==========
 
@@ -12,6 +13,7 @@ import "dissidents.proto";
 
 message ProvincesSettings {
   repeated ProvinceSettings province_settings = 1;
+  ConflictsSettings conflicts_settings = 2;
 }
 
 message ProvinceSettings {
@@ -38,6 +40,7 @@ message ProvinceSettings {
 
 message ProvincesState {
   repeated ProvinceState province_states = 1;
+  ConflictsState conflicts = 2;
 }
 
 message ProvinceState {

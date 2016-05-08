@@ -13,7 +13,6 @@ import "victory.proto";
 import "year.proto";
 
 message GameState {
-  ConflictsState conflicts_state = 1;
   HeatState heat_state = 2;
   LeadersState leaders_state = 3;
   PointsState points_state = 4;
