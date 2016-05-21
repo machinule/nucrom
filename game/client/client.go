@@ -12,6 +12,9 @@ type Client interface {
 	Connect() error
 	Join() error
 	EndTurn() error
+	Player() pb.Player
+	Turn() int
+	GameOver() bool
 }
 
 // A Client contains the necessary state for a game client.
@@ -20,6 +23,8 @@ type client struct {
 	service  pb.GameServiceClient
 	settings *pb.GameSettings
 	player   pb.Player
+	turn     *pb.TurnState
+	state    *pb.GameState
 }
 
 // New creates a new Client.
@@ -45,9 +50,33 @@ func (c *client) Join() error {
 	}
 	c.settings = r.Settings
 	c.player = r.Player
+	s, err := c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
+		ReturnTurnOnly: false,
+	})
+	if err != nil {
+		return fmt.Errorf("getting initial game state: %v", err)
+	}
+	c.turn = s.Turn
+	c.state = s.State
 	return nil
 }
 
+func (c *client) Turn() int {
+	if c.turn != nil {
+		return int(c.turn.Index)
+	}
+	return 0
+}
+
+func (c *client) Player() pb.Player {
+	return c.player
+}
+
 func (c *client) EndTurn() error {
+	c.turn.Index = c.turn.Index + 1
 	return nil
+}
+
+func (c *client) GameOver() bool {
+	return c.Turn() > 40
 }
