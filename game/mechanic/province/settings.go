@@ -8,6 +8,14 @@ import (
 // Settings contains parameters that do not change over the course of a game.
 type Settings struct {
 	Provinces map[pb.ProvinceId]*ProvSettings
+	Conflict  ConflictSettings
+}
+
+// Conflict settings
+type ConflictSettings struct {
+	init_active   []*Conflict
+	init_dormant  []*Conflict
+	init_possible []*Conflict
 }
 
 // Settings for an individual province

@@ -10,16 +10,39 @@ import (
 type State struct {
 	settings  *Settings
 	Provinces map[pb.ProvinceId]*ProvState
+	Conflicts map[pb.ProvinceId]*Conflict // Keys = locations
+	Dormant   map[pb.ProvinceId]*Conflict
+	Possible  map[pb.ProvinceId]*Conflict
 }
 
 // The state of a single province
 type ProvState struct {
 	id         pb.ProvinceId // Province id enum
-	influence  int32         // Influence
-	government pb.Government // Government
-	occupier   pb.ProvinceId // Occupier
-	leader     string        // Leader
-	// dissidents TYPE // Dissidents
+	influence  int32
+	government pb.Government
+	occupier   pb.ProvinceId
+	leader     string
+	// dissidents TYPE
+}
+
+// Conflict structure
+type Conflict struct {
+	name          string // Name of conflict
+	conflict_type pb.ConflictType
+	goal          int32 // Goal to reach to end conflict
+	attackers     Faction
+	defenders     Faction
+	length        int32
+	base_chance   int32
+	locations     []pb.ProvinceId
+}
+
+// Side of a conflict
+type Faction struct {
+	members   []pb.ProvinceId
+	supporter pb.Player
+	progress  int32
+	// rebels Dissidents
 }
 
 // NewState creates a new state from the GameState message and the previous state.
@@ -30,7 +53,33 @@ func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
 	return &State{
 		settings:  prev.settings,
 		Provinces: prev.Provinces,
+		Conflicts: prev.Conflicts,
+		Dormant:   prev.Dormant,
+		Possible:  prev.Possible,
 	}, nil
+}
+
+// Helper for marshaling conflicts
+func MarshalConflict(c *Conflict) pb.Conflict {
+	return pb.Conflict{
+		Name: c.Name(),
+		Type: c.Type(),
+		Goal: c.Goal(),
+		Attackers: &pb.Faction{
+			Ids:       c.Attackers(),
+			Supporter: c.Att_Supporter(),
+			Progress:  c.Att_Progress(),
+			// TODO: Rebels
+		},
+		Defenders: &pb.Faction{
+			Ids:       c.Defenders(),
+			Supporter: c.Def_Supporter(),
+			Progress:  c.Def_Progress(),
+			// TODO: Rebels
+		},
+		Length:     c.Length(),
+		BaseChance: c.BaseChance(),
+	}
 }
 
 // Marshal fills in the GameState proto with the current state.
@@ -42,6 +91,9 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 		stateProto.ProvincesState = &pb.ProvincesState{}
 	}
 	var provs []*pb.ProvinceState
+	var conflicts []*pb.Conflict
+	var dormant []*pb.Conflict
+	var possible []*pb.Conflict
 	for _, p := range s.Provinces {
 		provs = append(provs, &pb.ProvinceState{
 			Id:        p.Id(),
@@ -52,13 +104,32 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 			//TODO: Dissidents: p.Dissidents(),
 		})
 	}
+	for _, c := range s.Conflicts {
+		mc := MarshalConflict(c)
+		conflicts = append(conflicts, &mc)
+	}
+	for _, c := range s.Dormant {
+		mc := MarshalConflict(c)
+		dormant = append(dormant, &mc)
+	}
+	for _, c := range s.Possible {
+		mc := MarshalConflict(c)
+		possible = append(possible, &mc)
+	}
 	stateProto.ProvincesState = &pb.ProvincesState{
 		ProvinceStates: provs,
+		Conflicts: &pb.ConflictsState{
+			Active:   conflicts,
+			Dormant:  dormant,
+			Possible: possible,
+		},
 	}
 	return nil
 }
 
 // GETTERS
+
+// Provinces
 
 func (s *State) Settings() *Settings {
 	return s.settings
@@ -86,6 +157,56 @@ func (s *ProvState) Occupier() pb.ProvinceId {
 
 func (s *ProvState) Leader() string {
 	return s.leader
+}
+
+// Conflict
+
+func (s *State) Conflict(id pb.ProvinceId) *Conflict {
+	return s.Conflicts[id]
+}
+
+func (c *Conflict) Name() string {
+	return c.name
+}
+
+func (c *Conflict) Type() pb.ConflictType {
+	return c.conflict_type
+}
+
+func (c *Conflict) Goal() int32 {
+	return c.goal
+}
+
+func (c *Conflict) Attackers() []pb.ProvinceId {
+	return c.attackers.members
+}
+
+func (c *Conflict) Defenders() []pb.ProvinceId {
+	return c.defenders.members
+}
+
+func (c *Conflict) Att_Progress() int32 {
+	return c.attackers.progress
+}
+
+func (c *Conflict) Def_Progress() int32 {
+	return c.defenders.progress
+}
+
+func (c *Conflict) Def_Supporter() pb.Player {
+	return c.defenders.supporter
+}
+
+func (c *Conflict) Att_Supporter() pb.Player {
+	return c.attackers.supporter
+}
+
+func (c *Conflict) Length() int32 {
+	return c.length
+}
+
+func (c *Conflict) BaseChance() int32 {
+	return c.base_chance
 }
 
 // SETTERS
