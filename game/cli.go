@@ -4,37 +4,30 @@ package main
 import (
 	"fmt"
 	"log"
-	"net"
 
+	gameclient "github.com/machinule/nucrom/game/client"
+	gameserver "github.com/machinule/nucrom/game/server"
 	"github.com/machinule/nucrom/game/setup"
-	gamenet "github.com/machinule/nucrom/net"
-	pb "github.com/machinule/nucrom/proto/gen"
 	"github.com/turret-io/go-menu/menu"
-	"google.golang.org/grpc"
 )
 
 type game struct {
-	server *grpc.Server
+	server *gameserver.Server
+	client gameclient.Client
 }
 
-func (g *game) startServer(port string) {
-	fmt.Println("Starting game server...")
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+func (g *game) StartServerOrDie(port string) {
+	g.server = gameserver.New(port, setup.CreateGameSettings())
+	if err := g.server.Start(); err != nil {
+		log.Fatalf("Starting game server: %v", err)
 	}
-	g.server = grpc.NewServer()
-	gameServer, _ := gamenet.NewServer(setup.CreateGameSettings())
-	pb.RegisterGameServiceServer(g.server, gameServer)
-	go g.server.Serve(lis)
 }
 
 func (g *game) netHost(_ ...string) error {
 	fmt.Println("Hosting a net game...")
-	g.startServer(":7754")
-	client, _ := gamenet.NewClient("localhost:7754")
-	defer client.Close()
-	client.Join()
+	g.server = gameserver.New(":7544", setup.CreateGameSettings())
+	g.client = gameclient.New("localhost:7544")
+	g.GameOn()
 	return nil
 }
 
@@ -43,28 +36,32 @@ func (g *game) netConnect(_ ...string) error {
 	fmt.Print("Hostport: ")
 	var hostport string
 	fmt.Sscanln("%s", &hostport)
-	client, _ := gamenet.NewClient(hostport)
-	defer client.Close()
-	client.Join()
+	g.client = gameclient.New(hostport)
+	g.GameOn()
 	return nil
 }
 
 func (g *game) hotseat(_ ...string) error {
 	fmt.Println("Starting a hotseat game...")
-	g.startServer(":7754")
-	firstClient, _ := gamenet.NewClient("localhost:7754")
-	defer firstClient.Close()
-	secondClient, _ := gamenet.NewClient("localhost:7754")
-	defer secondClient.Close()
-	firstClient.Join()
-	secondClient.Join()
-
+	g.server = gameserver.New(":7544", setup.CreateGameSettings())
+	g.client = gameclient.NewMux("localhost:7544", 2)
+	g.GameOn()
 	return nil
 }
 
-func (g *game) Stop() {
-	fmt.Println("Stopping game server...")
-	g.server.Stop()
+func (g *game) GameOn() {
+	if g.server != nil {
+		if err := g.server.Start(); err != nil {
+			log.Fatalf("Failed to start game server: %v", err)
+		}
+	}
+	if err := g.client.Connect(); err != nil {
+		log.Fatalf("Failed to connect to game server: %v", err)
+	}
+	if err := g.client.Join(); err != nil {
+		log.Fatalf("Failed to join game: %v", err)
+	}
+	fmt.Println("gaming on...")
 }
 
 func main() {
@@ -79,5 +76,4 @@ func main() {
 	}
 
 	menu.NewMenu(opts, menu.NewMenuOptions("Game Choice > ", 0)).Start()
-	g.Stop()
 }

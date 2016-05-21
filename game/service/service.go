@@ -1,4 +1,5 @@
-package net
+// Package service implements the GameService.
+package service
 
 import (
 	"fmt"
@@ -7,8 +8,8 @@ import (
 	"sync"
 )
 
-// GameServer contains the state of the game, and implements the GameService.
-type GameServer struct {
+// Service contains the state of the game, and implements the GameService.
+type Service struct {
 	settings *pb.GameSettings
 
 	lock    sync.RWMutex
@@ -17,11 +18,12 @@ type GameServer struct {
 	players <-chan pb.Player
 }
 
-func NewServer(s *pb.GameSettings) (*GameServer, error) {
+// New creates a new Service with the specified GameSettings.
+func New(s *pb.GameSettings) *Service {
 	p := make(chan pb.Player, 2)
 	p <- pb.Player_USA
 	p <- pb.Player_USSR
-	return &GameServer{
+	return &Service{
 		settings: s,
 		state:    nil,
 		turn: &pb.TurnState{
@@ -29,10 +31,10 @@ func NewServer(s *pb.GameSettings) (*GameServer, error) {
 			Moved: nil,
 		},
 		players: p,
-	}, nil
+	}
 }
 
-func (s *GameServer) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb.JoinGameResponse, error) {
+func (s *Service) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb.JoinGameResponse, error) {
 	p, ok := <-s.players
 	if !ok {
 		return nil, fmt.Errorf("No more player slots available.")
@@ -43,7 +45,7 @@ func (s *GameServer) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb
 	}, nil
 }
 
-func (s *GameServer) GetGameState(ctx context.Context, req *pb.GetGameStateRequest) (*pb.GetGameStateResponse, error) {
+func (s *Service) GetGameState(ctx context.Context, req *pb.GetGameStateRequest) (*pb.GetGameStateResponse, error) {
 	s.lock.RLock()
 	defer s.lock.RUnlock()
 	resp := &pb.GetGameStateResponse{
@@ -56,6 +58,6 @@ func (s *GameServer) GetGameState(ctx context.Context, req *pb.GetGameStateReque
 	return resp, nil
 }
 
-func (s *GameServer) SetTurn(ctx context.Context, req *pb.SetTurnRequest) (*pb.SetTurnResponse, error) {
+func (s *Service) SetTurn(ctx context.Context, req *pb.SetTurnRequest) (*pb.SetTurnResponse, error) {
 	return &pb.SetTurnResponse{}, nil
 }
