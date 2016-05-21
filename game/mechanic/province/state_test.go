@@ -136,9 +136,9 @@ func TestNewConflictState(t *testing.T) {
 								},
 								Length:     6,
 								BaseChance: 150000,
-                                Locations: []pb.ProvinceId{
-                                    pb.ProvinceId_P_USA,
-                                },
+								Locations: []pb.ProvinceId{
+									pb.ProvinceId_P_USA,
+								},
 							},
 						},
 						Dormant:  []*pb.Conflict{},
@@ -169,9 +169,9 @@ func TestNewConflictState(t *testing.T) {
 						},
 						length:      7,
 						base_chance: 150000,
-                        locations: []pb.ProvinceId{
-                            pb.ProvinceId_P_USA,
-                        },
+						locations: []pb.ProvinceId{
+							pb.ProvinceId_P_USA,
+						},
 					},
 				},
 			},
@@ -250,21 +250,21 @@ func TestNewConflictState(t *testing.T) {
 		if got, want := s.settings, tc.prev.settings; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
-        if got, want := s.IsAtWar(pb.ProvinceId_P_USA), true; got != want {
-            t.Errorf("IsAtWar #1: got %d, want %d", got, want)
-        }
-        if got, want := s.IsAtWar(pb.ProvinceId_GREAT_BRITAIN), true; got != want {
-            t.Errorf("IsAtWar #2: got %d, want %d", got, want)
-        }
-        if got, want := s.IsAtWar(pb.ProvinceId_P_USSR), false; got != want {
-            t.Errorf("IsAtWar #3: got %d, want %d", got, want)
-        }
-        if got, want := s.IsSiteOfConflict(pb.ProvinceId_P_USA), true; got != want {
-            t.Errorf("IsSiteOfConflict #1: got %d, want %d", got, want)
-        }
-        if got, want := s.IsSiteOfConflict(pb.ProvinceId_GREAT_BRITAIN), false; got != want {
-            t.Errorf("IsSiteOfConflict #2: got %d, want %d", got, want)
-        }
+		if got, want := s.IsAtWar(pb.ProvinceId_P_USA), true; got != want {
+			t.Errorf("IsAtWar #1: got %d, want %d", got, want)
+		}
+		if got, want := s.IsAtWar(pb.ProvinceId_GREAT_BRITAIN), true; got != want {
+			t.Errorf("IsAtWar #2: got %d, want %d", got, want)
+		}
+		if got, want := s.IsAtWar(pb.ProvinceId_P_USSR), false; got != want {
+			t.Errorf("IsAtWar #3: got %d, want %d", got, want)
+		}
+		if got, want := s.IsSiteOfConflict(pb.ProvinceId_P_USA), true; got != want {
+			t.Errorf("IsSiteOfConflict #1: got %d, want %d", got, want)
+		}
+		if got, want := s.IsSiteOfConflict(pb.ProvinceId_GREAT_BRITAIN), false; got != want {
+			t.Errorf("IsSiteOfConflict #2: got %d, want %d", got, want)
+		}
 
 	}
 }
@@ -301,9 +301,9 @@ func TestConflictMarshal(t *testing.T) {
 						},
 						length:      7,
 						base_chance: 150000,
-                        locations: []pb.ProvinceId{
-                            pb.ProvinceId_P_USA,
-                        },
+						locations: []pb.ProvinceId{
+							pb.ProvinceId_P_USA,
+						},
 					},
 				},
 			},
@@ -333,9 +333,9 @@ func TestConflictMarshal(t *testing.T) {
 								},
 								Length:     7,
 								BaseChance: 150000,
-                                Locations: []pb.ProvinceId{
-                                    pb.ProvinceId_P_USA,
-                                },
+								Locations: []pb.ProvinceId{
+									pb.ProvinceId_P_USA,
+								},
 							},
 						},
 						Dormant:  []*pb.Conflict{},
@@ -368,9 +368,9 @@ func TestConflictMarshal(t *testing.T) {
 						},
 						length:      7,
 						base_chance: 150000,
-                        locations: []pb.ProvinceId{
-                            pb.ProvinceId_P_USA,
-                        },
+						locations: []pb.ProvinceId{
+							pb.ProvinceId_P_USA,
+						},
 					},
 				},
 			},
