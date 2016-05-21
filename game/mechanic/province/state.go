@@ -79,7 +79,7 @@ func MarshalConflict(c *Conflict) pb.Conflict {
 		},
 		Length:     c.Length(),
 		BaseChance: c.BaseChance(),
-        Locations:  c.Locations(),
+		Locations:  c.Locations(),
 	}
 }
 
@@ -211,7 +211,7 @@ func (c *Conflict) BaseChance() int32 {
 }
 
 func (c *Conflict) Locations() []pb.ProvinceId {
-    return c.locations
+	return c.locations
 }
 
 // SETTERS
