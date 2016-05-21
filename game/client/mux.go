@@ -1,5 +1,9 @@
 package client
 
+import (
+	pb "github.com/machinule/nucrom/proto/gen"
+)
+
 // A mux multiplexes over multiple clients, presenting a single current client. EndTurn cycles the client.
 type mux struct {
 	curr    int
@@ -41,4 +45,16 @@ func (m *mux) EndTurn() error {
 	}
 	m.curr = (m.curr + 1) % len(m.clients)
 	return nil
+}
+
+func (m *mux) Turn() int {
+	return m.clients[m.curr].Turn()
+}
+
+func (m *mux) Player() pb.Player {
+	return m.clients[m.curr].Player()
+}
+
+func (m *mux) GameOver() bool {
+	return m.curr == len(m.clients)-1 && m.clients[m.curr].GameOver()
 }

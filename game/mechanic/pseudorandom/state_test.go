@@ -139,7 +139,7 @@ func TestMechanic(t *testing.T) {
 	// "Coin" flip (50/50)
 	var c_pdf [2]int32
 	for i := 0; i < 1000; i++ {
-		if s.happens(500000) {
+		if s.Happens(500000) {
 			c_pdf[1]++
 		} else {
 			c_pdf[0]++
@@ -155,7 +155,7 @@ func TestMechanic(t *testing.T) {
 	weights := []int32{4, 1, 2, 3} // Sum = 10
 	var w_pdf [4]int32
 	for i := 0; i < 1000; i++ {
-		w_pdf[s.roll(weights)]++
+		w_pdf[s.Roll(weights)]++
 	}
 	if got, want := w_pdf[0], int32(415); got != want {
 		t.Fatalf("weighted 0: got %d, want %d", got, want)

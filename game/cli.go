@@ -61,6 +61,10 @@ func (g *game) GameOn() {
 	if err := g.client.Join(); err != nil {
 		log.Fatalf("Failed to join game: %v", err)
 	}
+	for !g.client.GameOver() {
+		fmt.Printf("-----\n\tPlayer: %s\n\tTurn: %d\n-----\n", g.client.Player(), g.client.Turn())
+		g.client.EndTurn()
+	}
 	fmt.Println("gaming on...")
 }
 
