@@ -53,7 +53,7 @@ func (s *State) Seed(seed int64) {
 }
 
 // Rolls for a particular value (rolls from 0 to 1,000,000)
-func (s *State) happens(chance int32) bool {
+func (s *State) Happens(chance int32) bool {
 	if s.r.Int31n(1000000) < chance {
 		return true
 	}
@@ -61,7 +61,7 @@ func (s *State) happens(chance int32) bool {
 }
 
 // Weighted roll that Will is going to rip the fuck up
-func (s *State) roll(weights []int32) int32 {
+func (s *State) Roll(weights []int32) int32 {
 	var pdf []int
 	sum := int32(0)
 	for _, w := range weights {

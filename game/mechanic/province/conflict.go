@@ -3,9 +3,20 @@ package province
 
 import (
 	pb "github.com/machinule/nucrom/proto/gen"
+    pseudo "github.com/machinule/nucrom/game/mechanic/pseudorandom"
 )
 
 // HELPERS
+
+func (c *Conflict) GetModAttackerChance() int32 {
+    // TODO: Return modified attacker chance
+    return c.BaseChance()
+}
+
+func (c *Conflict) GetModDefenderChance() int32 {
+    // TODO: Return modifier defender chance
+    return c.BaseChance()
+}
 
 // QUERIES
 
@@ -40,8 +51,26 @@ func (s *State) IsAtWar(id pb.ProvinceId) bool {
 
 // ACTIONS
 
+// TODO: UNTESTED
 // Processes a conflict (rolls to determine progress, handles outcome)
-func (c *Conflict) Process() {
-	// TODO: Pseudorandom mechanic
+func (c *Conflict) Process(p *pseudo.State) {
 	c.length = c.length + 1
+    def_prog := p.Happens(c.GetModDefenderChance())
+    att_prog := p.Happens(c.GetModAttackerChance())
+    if att_prog {
+        // Attackers progress
+        c.attackers.progress++
+    }
+    if def_prog {
+        // Defenders progress
+        c.defenders.progress++
+    }
+    if att_prog && def_prog {
+        c.goal++
+    }
+    if c.attackers.progress == c.goal {
+        // Attackers win
+    } else if c.defenders.progress == c.goal {
+        // Defenders win
+    }
 }
