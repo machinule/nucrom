@@ -16,6 +16,14 @@ type ConflictSettings struct {
 	init_active   []*Conflict
 	init_dormant  []*Conflict
 	init_possible []*Conflict
+    base_chance_civil int32
+    base_chance_conventional int32
+    base_chance_action int32
+    base_chance_colonial int32
+    goal_civil int32
+    goal_conventional int32
+    goal_action int32
+    goal_colonial int32
 }
 
 // Settings for an individual province
@@ -63,6 +71,16 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 
 	return &Settings{
 		Provinces: provs,
+        Conflict: ConflictSettings{
+            base_chance_civil: settingsProto.GetProvincesSettings().GetConflictsSettings().BaseChanceCivil,
+            base_chance_conventional: settingsProto.GetProvincesSettings().GetConflictsSettings().BaseChanceConventional,
+            base_chance_action: settingsProto.GetProvincesSettings().GetConflictsSettings().BaseChanceAction,
+            base_chance_colonial: settingsProto.GetProvincesSettings().GetConflictsSettings().BaseChanceColonial,
+            goal_civil: settingsProto.GetProvincesSettings().GetConflictsSettings().GoalCivil,
+            goal_conventional: settingsProto.GetProvincesSettings().GetConflictsSettings().GoalConventional,
+            goal_action: settingsProto.GetProvincesSettings().GetConflictsSettings().GoalAction,
+            goal_colonial: settingsProto.GetProvincesSettings().GetConflictsSettings().GoalColonial,
+        },
 	}, nil
 }
 
@@ -116,6 +134,34 @@ func (s *ProvSettings) Region() pb.Region {
 
 func (s *ProvSettings) isCoastal() bool {
 	return s.coastal
+}
+
+func (s *Settings) GetConflictBaseChance(conflict_type pb.ConflictType) int32 {
+    switch conflict_type {
+        case pb.ConflictType_CIVIL_WAR:
+            return s.Conflict.base_chance_civil
+        case pb.ConflictType_CONVENTIONAL_WAR:
+            return s.Conflict.base_chance_conventional
+        case pb.ConflictType_MILITARY_ACTION:
+            return s.Conflict.base_chance_action
+        case pb.ConflictType_COLONIAL_WAR:
+            return s.Conflict.base_chance_colonial
+    }
+    return -1
+}
+
+func (s *Settings) GetConflictGoal(conflict_type pb.ConflictType) int32 {
+    switch conflict_type {
+        case pb.ConflictType_CIVIL_WAR:
+            return s.Conflict.goal_civil
+        case pb.ConflictType_CONVENTIONAL_WAR:
+            return s.Conflict.goal_conventional
+        case pb.ConflictType_MILITARY_ACTION:
+            return s.Conflict.goal_action
+        case pb.ConflictType_COLONIAL_WAR:
+            return s.Conflict.goal_colonial
+    }
+    return -1
 }
 
 // Initialization

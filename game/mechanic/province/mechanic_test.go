@@ -57,6 +57,16 @@ func TestMechanic(t *testing.T) {
 					InitGovernment: pb.Government_WEAK,
 				},
 			},
+            ConflictsSettings: &pb.ConflictsSettings{
+                BaseChanceCivil: 150000,
+                BaseChanceConventional: 150000,
+                BaseChanceAction: 150000,
+                BaseChanceColonial: 150000,
+                GoalCivil: 2,
+                GoalConventional: 2,
+                GoalAction: 2,
+                GoalColonial: 2,
+            },
 		},
 	}
 
@@ -123,6 +133,47 @@ func TestMechanic(t *testing.T) {
 	}
 	if got, want := m.IsSiteOfConflict(pb.ProvinceId_PAKISTAN), false; got != want {
 		t.Fatalf("Pakistan not site of conflict: got %s, want %s", got, want)
+	}
+    // Dissidents
+	if got, want := *(m.Get(pb.ProvinceId_IRAN).Dissidents()), *(&Dissidents{}); got != want {
+		t.Fatalf("Iran dissidents #1: got %s, want %s", got, want)
+	}
+    m.SetDissidents(pb.ProvinceId_IRAN, pb.Government_WEAK, "")
+	if got, want := *(m.Get(pb.ProvinceId_IRAN).Dissidents()), *(&Dissidents{gov: pb.Government_WEAK, leader: ""}); got != want {
+		t.Fatalf("Iran dissidents #2: got %s, want %s", got, want)
+	}
+    m.NewCivilWar(pb.ProvinceId_IRAN)
+	if got, want := m.IsAtWar(pb.ProvinceId_IRAN), true; got != want {
+		t.Fatalf("Iran at war: got %s, want %s", got, want)
+	}
+	if got, want := m.IsSiteOfConflict(pb.ProvinceId_IRAN), true; got != want {
+		t.Fatalf("Iran site of conflict: got %s, want %s", got, want)
+	}
+	if got, want := m.IsAtWar(pb.ProvinceId_AFGHANISTAN), false; got != want {
+		t.Fatalf("Afghanistan at war: got %s, want %s", got, want)
+	}
+	if got, want := m.GetConflict(pb.ProvinceId_IRAN).Process(r), ONGOING; got != want {
+		t.Fatalf("War process #1: got %s, want %s", got, want)
+	}
+	if got, want := m.GetConflict(pb.ProvinceId_IRAN).Process(r), ATTACKER; got != want {
+		t.Fatalf("War process #2: got %s, want %s", got, want)
+	}
+	m.ResolveConflicts(r)
+    // TODO: Weak vs Autocratic gov
+	if got, want := *(m.Get(pb.ProvinceId_IRAN).Dissidents()), *(&Dissidents{}); got != want {
+		t.Fatalf("Iran dissidents post-war: got %s, want %s", got, want)
+	}
+	if got, want := m.Get(pb.ProvinceId_IRAN).Gov(), pb.Government_WEAK; got != want {
+		t.Fatalf("Iran post-war gov: got %s, want %s", got, want)
+	}
+	if got, want := m.Get(pb.ProvinceId_IRAN).Leader(), ""; got != want {
+		t.Fatalf("Iran post-war leader: got %s, want %s", got, want)
+	}
+	if got, want := m.IsAtWar(pb.ProvinceId_IRAN), false; got != want {
+		t.Fatalf("Iran not at war: got %s, want %s", got, want)
+	}
+	if got, want := m.IsSiteOfConflict(pb.ProvinceId_IRAN), false; got != want {
+		t.Fatalf("Iran not site of conflict: got %s, want %s", got, want)
 	}
 	stateProto := &pb.GameState{}
 	err = m.Marshal(stateProto)

@@ -22,7 +22,7 @@ type ProvState struct {
 	government pb.Government
 	occupier   pb.ProvinceId
 	leader     string
-	// dissidents TYPE
+	dissidents Dissidents
 }
 
 // Conflict structure
@@ -42,7 +42,13 @@ type Faction struct {
 	members   []pb.ProvinceId
 	supporter pb.Player
 	progress  int32
-	// rebels Dissidents
+	rebels Dissidents
+}
+
+// Dissidents
+type Dissidents struct {
+    gov    pb.Government
+    leader string
 }
 
 // NewState creates a new state from the GameState message and the previous state.
@@ -69,13 +75,16 @@ func MarshalConflict(c *Conflict) pb.Conflict {
 			Ids:       c.Attackers(),
 			Supporter: c.Att_Supporter(),
 			Progress:  c.Att_Progress(),
-			// TODO: Rebels
+			Rebels:    &pb.Dissidents{
+                Gov: c.Rebels().Gov(),
+                Leader: c.Rebels().Leader(),
+            },
 		},
 		Defenders: &pb.Faction{
 			Ids:       c.Defenders(),
 			Supporter: c.Def_Supporter(),
 			Progress:  c.Def_Progress(),
-			// TODO: Rebels
+			// REBELS CANNOT BE DEFENDERS
 		},
 		Length:     c.Length(),
 		BaseChance: c.BaseChance(),
@@ -102,7 +111,10 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 			Gov:       p.Gov(),
 			Occupier:  p.Occupier(),
 			Leader:    p.Leader(),
-			//TODO: Dissidents: p.Dissidents(),
+			Dissidents: &pb.Dissidents{
+                Gov: p.Dissidents().Gov(),
+                Leader: p.Dissidents().Leader(),
+            },
 		})
 	}
 	for _, c := range s.Conflicts {
@@ -160,6 +172,20 @@ func (s *ProvState) Leader() string {
 	return s.leader
 }
 
+func (s *ProvState) Dissidents() *Dissidents {
+    return &s.dissidents
+}
+
+// Dissidents
+
+func (d *Dissidents) Gov() pb.Government {
+    return d.gov
+}
+
+func (d *Dissidents) Leader() string {
+    return d.leader
+}
+
 // Conflict
 
 func (s *State) Conflict(id pb.ProvinceId) *Conflict {
@@ -214,6 +240,10 @@ func (c *Conflict) Locations() []pb.ProvinceId {
 	return c.locations
 }
 
+func (c *Conflict) Rebels() *Dissidents {
+    return &(c.attackers).rebels
+}
+
 // SETTERS
 
 func (s *ProvState) ApplyInfl(player pb.Player, magnitude int32) {
@@ -230,4 +260,15 @@ func (s *ProvState) SetGov(gov pb.Government) {
 
 func (s *ProvState) SetLeader(name string) {
 	s.leader = name
+}
+
+func (s *ProvState) SetDissidents(gov pb.Government, ldr string) {
+    s.dissidents = Dissidents{
+        gov: gov,
+        leader: ldr,
+    }
+}
+
+func (s *ProvState) RemoveDissidents() {
+    s.dissidents = Dissidents{}
 }

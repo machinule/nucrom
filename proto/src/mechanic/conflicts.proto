@@ -23,6 +23,14 @@ message ConflictsSettings {
   repeated Conflict init_active = 1;
   repeated Conflict init_dormant = 2;
   repeated Conflict init_possible = 3;
+  int32 base_chance_civil = 4;
+  int32 base_chance_conventional = 5;
+  int32 base_chance_action = 6;
+  int32 base_chance_colonial = 7;
+  int32 goal_civil = 8;
+  int32 goal_conventional = 9;
+  int32 goal_action = 10;
+  int32 goal_colonial = 11;
 }
 
 // ========== State ==========
