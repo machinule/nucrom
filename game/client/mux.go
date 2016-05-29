@@ -39,6 +39,10 @@ func (m *mux) Join() error {
 	return nil
 }
 
+func (m *mux) StartTurn() error {
+	return m.clients[m.curr].StartTurn()
+}
+
 func (m *mux) EndTurn() error {
 	if err := m.clients[m.curr].EndTurn(); err != nil {
 		return err

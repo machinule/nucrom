@@ -66,6 +66,7 @@ func (g *game) GameOn() {
     {"end", "End turn."},
   })
 	for !g.client.GameOver() {
+    g.client.StartTurn()
 		fmt.Printf("\n\n\n\n\n-----\n\tPlayer: %s\n\tTurn: %d\n-----\n", g.client.Player(), g.client.Turn())
     end := false
     for !end {

@@ -59,5 +59,14 @@ func (s *Service) GetGameState(ctx context.Context, req *pb.GetGameStateRequest)
 }
 
 func (s *Service) SetTurn(ctx context.Context, req *pb.SetTurnRequest) (*pb.SetTurnResponse, error) {
+  s.lock.Lock()
+  defer s.lock.Unlock()
+  s.turn.Moved = append(s.turn.Moved, req.Player)
+  if len(s.turn.Moved) == 2 {
+    s.turn = &pb.TurnState {
+      Index: s.turn.Index + 1,
+      Moved: nil,
+    }
+  }
 	return &pb.SetTurnResponse{}, nil
 }
