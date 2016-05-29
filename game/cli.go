@@ -61,10 +61,24 @@ func (g *game) GameOn() {
 	if err := g.client.Join(); err != nil {
 		log.Fatalf("Failed to join game: %v", err)
 	}
+  turnMenu := menu.New([]menu.Option{
+    {"placeholder", "Do nothing"},
+    {"end", "End turn."},
+  })
 	for !g.client.GameOver() {
-		fmt.Printf("-----\n\tPlayer: %s\n\tTurn: %d\n-----\n", g.client.Player(), g.client.Turn())
+		fmt.Printf("\n\n\n\n\n-----\n\tPlayer: %s\n\tTurn: %d\n-----\n", g.client.Player(), g.client.Turn())
+    end := false
+    for !end {
+      switch turnMenu.Ask() {
+      case "placeholder":
+        fmt.Println("doing nothing")
+      default:
+        end = true
+      }
+    } 
+    g.client.EndTurn()
 	}
-	fmt.Println("gaming on...")
+	fmt.Println("Game Over.")
 }
 
 func main() {
@@ -72,15 +86,15 @@ func main() {
 	fmt.Println("Nuclear Romance")
 	fmt.Println("---------------")
 
-	opts := []menu.Option{
+  m := menu.New([]menu.Option{
 		{"nethost", "Host a net game."},
 		{"netconnect", "Connect to a net game."},
 		{"hotseat", "Run a hotseat game."},
     {"end", "End game."},
-	}
+	})
   end := false
   for !end {
-    switch menu.New(opts).Ask() {
+    switch m.Ask() {
     case "nethost":
       g.netHost()
     case "netconnect":
