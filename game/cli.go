@@ -8,7 +8,7 @@ import (
 	gameclient "github.com/machinule/nucrom/game/client"
 	gameserver "github.com/machinule/nucrom/game/server"
 	"github.com/machinule/nucrom/game/setup"
-	"github.com/turret-io/go-menu/menu"
+	"github.com/machinule/nucrom/frontend/menu"
 )
 
 type game struct {
@@ -23,7 +23,7 @@ func (g *game) StartServerOrDie(port string) {
 	}
 }
 
-func (g *game) netHost(_ ...string) error {
+func (g *game) netHost() error {
 	fmt.Println("Hosting a net game...")
 	g.server = gameserver.New(":7544", setup.CreateGameSettings())
 	g.client = gameclient.New("localhost:7544")
@@ -31,7 +31,7 @@ func (g *game) netHost(_ ...string) error {
 	return nil
 }
 
-func (g *game) netConnect(_ ...string) error {
+func (g *game) netConnect() error {
 	fmt.Println("Connecting to a net game...")
 	fmt.Print("Hostport: ")
 	var hostport string
@@ -41,7 +41,7 @@ func (g *game) netConnect(_ ...string) error {
 	return nil
 }
 
-func (g *game) hotseat(_ ...string) error {
+func (g *game) hotseat() error {
 	fmt.Println("Starting a hotseat game...")
 	g.server = gameserver.New(":7544", setup.CreateGameSettings())
 	g.client = gameclient.NewMux("localhost:7544", 2)
@@ -63,7 +63,6 @@ func (g *game) GameOn() {
 	}
 	for !g.client.GameOver() {
 		fmt.Printf("-----\n\tPlayer: %s\n\tTurn: %d\n-----\n", g.client.Player(), g.client.Turn())
-		g.client.EndTurn()
 	}
 	fmt.Println("gaming on...")
 }
@@ -73,11 +72,23 @@ func main() {
 	fmt.Println("Nuclear Romance")
 	fmt.Println("---------------")
 
-	opts := []menu.CommandOption{
-		menu.CommandOption{"nethost", "Host a net game.", g.netHost},
-		menu.CommandOption{"netconnect", "Connect to a net game.", g.netConnect},
-		menu.CommandOption{"hotseat", "Run a hotseat game.", g.hotseat},
+	opts := []menu.Option{
+		{"nethost", "Host a net game."},
+		{"netconnect", "Connect to a net game."},
+		{"hotseat", "Run a hotseat game."},
+    {"end", "End game."},
 	}
-
-	menu.NewMenu(opts, menu.NewMenuOptions("Game Choice > ", 0)).Start()
+  end := false
+  for !end {
+    switch menu.New(opts).Ask() {
+    case "nethost":
+      g.netHost()
+    case "netconnect":
+      g.netConnect()
+    case "hotseat":
+      g.hotseat()
+    default:
+      end = true
+    }
+  }
 }
