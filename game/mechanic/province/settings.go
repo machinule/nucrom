@@ -82,6 +82,9 @@ func (s *Settings) InitState() (*State, error) {
 	return &State{
 		settings:  s,
 		Provinces: provs,
+		Conflicts: make(map[pb.ProvinceId]*Conflict),
+		Dormant:   make(map[pb.ProvinceId]*Conflict),
+		Possible:  make(map[pb.ProvinceId]*Conflict),
 	}, nil
 }
 

@@ -2,6 +2,7 @@ package province
 
 import (
 	//"github.com/golang/protobuf/proto"
+	pseudo "github.com/machinule/nucrom/game/mechanic/pseudorandom"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"testing"
 )
@@ -9,6 +10,9 @@ import (
 func TestMechanic(t *testing.T) {
 	// 1978-1981
 	testProto := &pb.GameSettings{
+		PseudorandomSettings: &pb.PseudorandomSettings{
+			InitSeed: 42,
+		},
 		ProvincesSettings: &pb.ProvincesSettings{
 			ProvinceSettings: []*pb.ProvinceSettings{
 				&pb.ProvinceSettings{
@@ -64,6 +68,8 @@ func TestMechanic(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewSettings: unexpected error: %e", err)
 	}
+	rs, err := pseudo.NewSettings(testProto)
+	r, err := rs.InitState()
 	if got, want := m.GetNetStability(pb.ProvinceId_IRAN), int32(4); got != want {
 		t.Fatalf("Iran net stability: got %d, want %d", got, want)
 	}
@@ -91,7 +97,33 @@ func TestMechanic(t *testing.T) {
 	if got, want := m.GetAlly(pb.ProvinceId_PAKISTAN), pb.Player_NEITHER; got != want {
 		t.Fatalf("Pakistan ally #3: got %s, want %s", got, want)
 	}
-
+	// Conflict
+	m.NewConventionalWar([]pb.ProvinceId{pb.ProvinceId_PAKISTAN}, []pb.ProvinceId{pb.ProvinceId_INDIA}, []pb.ProvinceId{pb.ProvinceId_PAKISTAN, pb.ProvinceId_INDIA})
+	if got, want := m.IsAtWar(pb.ProvinceId_PAKISTAN), true; got != want {
+		t.Fatalf("Pakistan at war: got %s, want %s", got, want)
+	}
+	if got, want := m.IsSiteOfConflict(pb.ProvinceId_PAKISTAN), true; got != want {
+		t.Fatalf("Pakistan site of conflict: got %s, want %s", got, want)
+	}
+	if got, want := m.IsAtWar(pb.ProvinceId_AFGHANISTAN), false; got != want {
+		t.Fatalf("Afghanistan at war: got %s, want %s", got, want)
+	}
+	if got, want := m.GetConflict(pb.ProvinceId_PAKISTAN).Process(r), ONGOING; got != want {
+		t.Fatalf("War process #1: got %s, want %s", got, want)
+	}
+	if got, want := m.GetConflict(pb.ProvinceId_PAKISTAN).Process(r), ONGOING; got != want {
+		t.Fatalf("War process #2: got %s, want %s", got, want)
+	}
+	if got, want := m.GetConflict(pb.ProvinceId_PAKISTAN).Process(r), DEFENDER; got != want {
+		t.Fatalf("War process #3: got %s, want %s", got, want)
+	}
+	m.ResolveConflicts(r)
+	if got, want := m.IsAtWar(pb.ProvinceId_PAKISTAN), false; got != want {
+		t.Fatalf("Pakistan not at war: got %s, want %s", got, want)
+	}
+	if got, want := m.IsSiteOfConflict(pb.ProvinceId_PAKISTAN), false; got != want {
+		t.Fatalf("Pakistan not site of conflict: got %s, want %s", got, want)
+	}
 	stateProto := &pb.GameState{}
 	err = m.Marshal(stateProto)
 	if err != nil {
