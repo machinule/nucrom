@@ -323,7 +323,7 @@ func TestConflictMarshal(t *testing.T) {
 									},
 									Supporter: pb.Player_USSR, // Basically the French
 									Progress:  4,
-                                    Rebels: &pb.Dissidents{},
+									Rebels:    &pb.Dissidents{},
 								},
 								Defenders: &pb.Faction{
 									Ids: []pb.ProvinceId{
@@ -331,7 +331,7 @@ func TestConflictMarshal(t *testing.T) {
 									},
 									Supporter: pb.Player_NEITHER,
 									Progress:  3,
-                                    // No dissident defenders
+									// No dissident defenders
 								},
 								Length:     7,
 								BaseChance: 150000,
@@ -422,8 +422,8 @@ func TestMarshal(t *testing.T) {
 							Influence: -1,
 							Gov:       pb.Government_COMMUNISM,
 							// No occupier
-							Leader: "David Mihai",
-                            Dissidents: &pb.Dissidents{},
+							Leader:     "David Mihai",
+							Dissidents: &pb.Dissidents{},
 						},
 					},
 					Conflicts: &pb.ConflictsState{},

@@ -96,10 +96,10 @@ func (s *State) NewConventionalWar(defenders []pb.ProvinceId, attackers []pb.Pro
 			members:  defenders,
 			progress: 0,
 		},
-		goal:        s.Settings().GetConflictGoal(pb.ConflictType_CONVENTIONAL_WAR),
-		base_chance: s.Settings().GetConflictBaseChance(pb.ConflictType_CONVENTIONAL_WAR),
-		locations:   locations,
-        conflict_type: pb.ConflictType_CONVENTIONAL_WAR,
+		goal:          s.Settings().GetConflictGoal(pb.ConflictType_CONVENTIONAL_WAR),
+		base_chance:   s.Settings().GetConflictBaseChance(pb.ConflictType_CONVENTIONAL_WAR),
+		locations:     locations,
+		conflict_type: pb.ConflictType_CONVENTIONAL_WAR,
 	}
 	// For now it maps only to the first location
 	s.Conflicts[locations[0]] = c
@@ -115,17 +115,17 @@ func (s *State) NewCivilWar(target pb.ProvinceId) bool { // TODO: Error return
 		name:   "Civil War", // TODO
 		length: 0,
 		attackers: Faction{
-			rebels: *(s.Get(target).Dissidents()),
-            progress: 0,
+			rebels:   *(s.Get(target).Dissidents()),
+			progress: 0,
 		},
 		defenders: Faction{
 			members:  []pb.ProvinceId{target},
 			progress: 0,
 		},
-		goal:        s.Settings().GetConflictGoal(pb.ConflictType_CIVIL_WAR),
-		base_chance: s.Settings().GetConflictBaseChance(pb.ConflictType_CIVIL_WAR),
-		locations:   []pb.ProvinceId{target},
-        conflict_type: pb.ConflictType_CIVIL_WAR,
+		goal:          s.Settings().GetConflictGoal(pb.ConflictType_CIVIL_WAR),
+		base_chance:   s.Settings().GetConflictBaseChance(pb.ConflictType_CIVIL_WAR),
+		locations:     []pb.ProvinceId{target},
+		conflict_type: pb.ConflictType_CIVIL_WAR,
 	}
 	s.Conflicts[target] = c
 	return true
@@ -141,16 +141,16 @@ func (s *State) NewColonialWar(target pb.ProvinceId) bool { // TODO: Error retur
 		length: 0,
 		attackers: Faction{
 			// Dissidents
-            progress: 0,
+			progress: 0,
 		},
 		defenders: Faction{
-			members: []pb.ProvinceId{s.Get(target).Occupier()},
-            progress: 0,
+			members:  []pb.ProvinceId{s.Get(target).Occupier()},
+			progress: 0,
 		},
-		goal:        s.Settings().GetConflictGoal(pb.ConflictType_COLONIAL_WAR),
-		base_chance: s.Settings().GetConflictBaseChance(pb.ConflictType_COLONIAL_WAR),
-		locations:   []pb.ProvinceId{target},
-        conflict_type: pb.ConflictType_COLONIAL_WAR,
+		goal:          s.Settings().GetConflictGoal(pb.ConflictType_COLONIAL_WAR),
+		base_chance:   s.Settings().GetConflictBaseChance(pb.ConflictType_COLONIAL_WAR),
+		locations:     []pb.ProvinceId{target},
+		conflict_type: pb.ConflictType_COLONIAL_WAR,
 	}
 	s.Conflicts[target] = c
 	return true
@@ -187,36 +187,36 @@ func (c *Conflict) Process(p *pseudo.State) WarResult {
 // Processes all conflicts
 func (s *State) ResolveConflicts(p *pseudo.State) {
 	for _, c := range s.Conflicts {
-        result := c.Process(p)
+		result := c.Process(p)
 		if result != ONGOING {
-            switch c.conflict_type {
-                case pb.ConflictType_CIVIL_WAR:
-                    prov := c.Defenders()[0]
-                    if result == ATTACKER { // Rebel victory
-                        // TODO: Weak vs Autocratic gov
-                        s.SetGov(prov, c.attackers.rebels.gov)
-                        s.SetLeader(prov, c.attackers.rebels.leader)
-                        // TODO: Influence calculations
-                    } else { // Government victory
-                        // TODO: Influence calculations
-                    }
-                    s.RemoveDissidents(prov)
-                case pb.ConflictType_CONVENTIONAL_WAR:
-                    // TODO: Process Victory
-                case pb.ConflictType_MILITARY_ACTION:
-                    // TODO: Process Victory
-                case pb.ConflictType_COLONIAL_WAR:
-                    prov := c.Locations()[0]
-                    if result == ATTACKER { // Rebel victory
-                        // TODO: Weak vs Autocratic gov
-                        s.SetGov(prov, c.attackers.rebels.gov)
-                        s.SetLeader(prov, c.attackers.rebels.leader)
-                        // TODO: Influence calculations (incl. overlord)
-                    } else { // Overlord victory
-                        // TODO: Influence calculations (overlord)
-                    }
-                    s.RemoveDissidents(prov)
-            }
+			switch c.conflict_type {
+			case pb.ConflictType_CIVIL_WAR:
+				prov := c.Defenders()[0]
+				if result == ATTACKER { // Rebel victory
+					// TODO: Weak vs Autocratic gov
+					s.SetGov(prov, c.attackers.rebels.gov)
+					s.SetLeader(prov, c.attackers.rebels.leader)
+					// TODO: Influence calculations
+				} else { // Government victory
+					// TODO: Influence calculations
+				}
+				s.RemoveDissidents(prov)
+			case pb.ConflictType_CONVENTIONAL_WAR:
+				// TODO: Process Victory
+			case pb.ConflictType_MILITARY_ACTION:
+				// TODO: Process Victory
+			case pb.ConflictType_COLONIAL_WAR:
+				prov := c.Locations()[0]
+				if result == ATTACKER { // Rebel victory
+					// TODO: Weak vs Autocratic gov
+					s.SetGov(prov, c.attackers.rebels.gov)
+					s.SetLeader(prov, c.attackers.rebels.leader)
+					// TODO: Influence calculations (incl. overlord)
+				} else { // Overlord victory
+					// TODO: Influence calculations (overlord)
+				}
+				s.RemoveDissidents(prov)
+			}
 			delete(s.Conflicts, c.Defenders()[0])
 		}
 	}

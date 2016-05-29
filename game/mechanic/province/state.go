@@ -42,13 +42,13 @@ type Faction struct {
 	members   []pb.ProvinceId
 	supporter pb.Player
 	progress  int32
-	rebels Dissidents
+	rebels    Dissidents
 }
 
 // Dissidents
 type Dissidents struct {
-    gov    pb.Government
-    leader string
+	gov    pb.Government
+	leader string
 }
 
 // NewState creates a new state from the GameState message and the previous state.
@@ -75,10 +75,10 @@ func MarshalConflict(c *Conflict) pb.Conflict {
 			Ids:       c.Attackers(),
 			Supporter: c.Att_Supporter(),
 			Progress:  c.Att_Progress(),
-			Rebels:    &pb.Dissidents{
-                Gov: c.Rebels().Gov(),
-                Leader: c.Rebels().Leader(),
-            },
+			Rebels: &pb.Dissidents{
+				Gov:    c.Rebels().Gov(),
+				Leader: c.Rebels().Leader(),
+			},
 		},
 		Defenders: &pb.Faction{
 			Ids:       c.Defenders(),
@@ -112,9 +112,9 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 			Occupier:  p.Occupier(),
 			Leader:    p.Leader(),
 			Dissidents: &pb.Dissidents{
-                Gov: p.Dissidents().Gov(),
-                Leader: p.Dissidents().Leader(),
-            },
+				Gov:    p.Dissidents().Gov(),
+				Leader: p.Dissidents().Leader(),
+			},
 		})
 	}
 	for _, c := range s.Conflicts {
@@ -173,17 +173,17 @@ func (s *ProvState) Leader() string {
 }
 
 func (s *ProvState) Dissidents() *Dissidents {
-    return &s.dissidents
+	return &s.dissidents
 }
 
 // Dissidents
 
 func (d *Dissidents) Gov() pb.Government {
-    return d.gov
+	return d.gov
 }
 
 func (d *Dissidents) Leader() string {
-    return d.leader
+	return d.leader
 }
 
 // Conflict
@@ -241,7 +241,7 @@ func (c *Conflict) Locations() []pb.ProvinceId {
 }
 
 func (c *Conflict) Rebels() *Dissidents {
-    return &(c.attackers).rebels
+	return &(c.attackers).rebels
 }
 
 // SETTERS
@@ -263,12 +263,12 @@ func (s *ProvState) SetLeader(name string) {
 }
 
 func (s *ProvState) SetDissidents(gov pb.Government, ldr string) {
-    s.dissidents = Dissidents{
-        gov: gov,
-        leader: ldr,
-    }
+	s.dissidents = Dissidents{
+		gov:    gov,
+		leader: ldr,
+	}
 }
 
 func (s *ProvState) RemoveDissidents() {
-    s.dissidents = Dissidents{}
+	s.dissidents = Dissidents{}
 }

@@ -3,6 +3,7 @@ package client
 
 import (
 	"fmt"
+  "time"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -11,6 +12,7 @@ import (
 type Client interface {
 	Connect() error
 	Join() error
+  StartTurn() error
 	EndTurn() error
 	Player() pb.Player
 	Turn() int
@@ -50,14 +52,6 @@ func (c *client) Join() error {
 	}
 	c.settings = r.Settings
 	c.player = r.Player
-	s, err := c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
-		ReturnTurnOnly: false,
-	})
-	if err != nil {
-		return fmt.Errorf("getting initial game state: %v", err)
-	}
-	c.turn = s.Turn
-	c.state = s.State
 	return nil
 }
 
@@ -72,8 +66,37 @@ func (c *client) Player() pb.Player {
 	return c.player
 }
 
+func (c *client) StartTurn() error {
+  for {
+    s, err := c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
+      ReturnTurnOnly: true,
+    })
+    if err != nil {
+      return fmt.Errorf("getting latest turn from server: %v", err)
+    }
+    if c.turn == nil || s.Turn.Index != c.turn.Index {
+      s, err = c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
+        ReturnTurnOnly: false,
+      })
+      if err != nil {
+        return fmt.Errorf("getting game state from server: %v", err)
+      }
+      c.turn = s.Turn
+      c.state = s.State
+      break
+    }    
+    time.Sleep(1 * time.Second)
+  } 
+  return nil
+}
+
 func (c *client) EndTurn() error {
-	c.turn.Index = c.turn.Index + 1
+  _, err := c.service.SetTurn(context.Background(), &pb.SetTurnRequest{
+    Player: c.player,
+  })
+  if err != nil {
+    return fmt.Errorf("ending turn: %v", err)
+  }
 	return nil
 }
 
