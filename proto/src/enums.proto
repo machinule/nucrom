@@ -4,6 +4,7 @@ package pb;
 
 enum Player {
   UNKNOWN_PLAYER = 0;
+  
   USSR = 1;
   USA = 2;
   NEITHER = 3;

@@ -77,3 +77,13 @@ func (s *State) SetGov(id pb.ProvinceId, gov pb.Government) {
 func (s *State) SetLeader(id pb.ProvinceId, name string) {
 	s.Get(id).SetLeader(name)
 }
+
+// Adds dissidents to a province
+func (s *State) SetDissidents(id pb.ProvinceId, gov pb.Government, ldr string) {
+	s.Get(id).SetDissidents(gov, ldr)
+}
+
+// Removes dissidents
+func (s *State) RemoveDissidents(id pb.ProvinceId) {
+	s.Get(id).RemoveDissidents()
+}
