@@ -13,15 +13,15 @@ type State struct {
 }
 
 // NewState creates a new state from the GameState message and the previous state.
-func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
-	if prev == nil {
-		return nil, fmt.Errorf("received nil previous state, unable to propogate settings.")
+func NewState(stateProto *pb.GameState, settings *Settings) (*State, error) {
+	if settings == nil {
+		return nil, fmt.Errorf("received nil Settings, unable to continue.")
 	}
 	if stateProto.GetYearState() == nil {
 		return nil, fmt.Errorf("received nil YearState, unable to continue.")
 	}
 	return &State{
-		settings: prev.settings,
+		settings: settings,
 		year:     stateProto.GetYearState().Year,
 	}, nil
 }

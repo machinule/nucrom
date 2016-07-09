@@ -21,15 +21,15 @@ type PointState struct {
 }
 
 // NewState creates a new state from the GameState message and the previous state.
-func NewState(stateProto *pb.GameState, prev *State) (*State, error) {
-	if prev == nil {
-		return nil, fmt.Errorf("received nil previous state, unable to propogate settings.")
+func NewState(stateProto *pb.GameState, settings *Settings) (*State, error) {
+	if settings == nil {
+		return nil, fmt.Errorf("received nil Settings, unable to continue.")
 	}
 	if stateProto.GetPointsState() == nil {
 		return nil, fmt.Errorf("received nil PointsState, unable to continue.")
 	}
 	return &State{
-		settings: prev.settings,
+		settings: settings,
 		usa: PointState{
 			pol: stateProto.GetPointsState().GetUsaState().Political,
 			mil: stateProto.GetPointsState().GetUsaState().Military,

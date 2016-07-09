@@ -7,10 +7,10 @@ import (
 )
 
 type NewStateCase struct {
-	proto *pb.GameState
-	prev  *State
-	year  int32
-	err   bool
+	proto    *pb.GameState
+	settings *Settings
+	year     int32
+	err      bool
 }
 
 func TestNewState(t *testing.T) {
@@ -21,11 +21,9 @@ func TestNewState(t *testing.T) {
 					Year: 34,
 				},
 			},
-			prev: &State{
-				settings: &Settings{},
-			},
-			year: 34,
-			err:  false,
+			settings: &Settings{},
+			year:     34,
+			err:      false,
 		},
 		{
 			proto: &pb.GameState{
@@ -33,12 +31,12 @@ func TestNewState(t *testing.T) {
 					Year: 34,
 				},
 			},
-			prev: nil,
-			err:  true,
+			settings: nil,
+			err:      true,
 		},
 	}
 	for _, tc := range cases {
-		s, err := NewState(tc.proto, tc.prev)
+		s, err := NewState(tc.proto, tc.settings)
 		if got, want := err != nil, tc.err; got != want {
 			msg := map[bool]string{
 				true:  "error",
@@ -53,7 +51,7 @@ func TestNewState(t *testing.T) {
 		if got, want := s.year, tc.year; got != want {
 			t.Errorf("year: got %d, want %d", got, want)
 		}
-		if got, want := s.settings, tc.prev.settings; got != want {
+		if got, want := s.settings, tc.settings; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
 	}
@@ -133,7 +131,7 @@ func TestMechanic(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Marshal: unexpected error: %e", err)
 	}
-	newState, err := NewState(stateProto, s)
+	newState, err := NewState(stateProto, s.settings)
 	if err != nil {
 		t.Fatalf("NewState: unexpected error: %e", err)
 	}

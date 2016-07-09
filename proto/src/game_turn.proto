@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package pb;
+
+// A GameTurn represents the current turn of the game.
+// A game starts with the turn index at 0, and increments from there.
+message GameTurn {
+  int32 index = 1;
+}

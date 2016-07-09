@@ -1,169 +1,98 @@
 // Package mechanic manages the state and settings of mechanics.
 package mechanic
 
-type Mechanic interface {
+import (
+	"github.com/machinule/nucrom/game/mechanic/heat"
+	"github.com/machinule/nucrom/game/mechanic/points"
+	"github.com/machinule/nucrom/game/mechanic/province"
+	"github.com/machinule/nucrom/game/mechanic/pseudorandom"
+	"github.com/machinule/nucrom/game/mechanic/year"
+	pb "github.com/machinule/nucrom/proto/gen"
+	"reflect"
+	"sort"
+)
+
+// An Initializer initializes itself from GameSettings.
+type Initializer interface {
+	Initialize(settings *pb.GameSettings) error
+}
+
+// A StateHolder maintains some portion of the GameState.
+type StateHolder interface {
+	SetState(state *pb.GameState) error
+	GetState(state *pb.GameState) error
 }
 
 // Mechanics provides accessors to settings and state registries of various mechanics.
 type Mechanics struct {
-  // Mechanics are listed here. They will be accessible directly by name, or indirectly through the
-  // Mechanic interface via reflection in New().
-  Heat heat.Mechanic
-  Points points.Mechanic
-  Province province.Mechanic
-  Pseudorandom pseudorandom.Mechanic
-  Year year.Mechanic
-  
-  mechanics []Mechanic
+	// Mechanics are listed here. They will be accessible directly by name, or indirectly by the interfaces they implement.
+	Heat         heat.Mechanic
+	Points       points.Mechanic
+	Province     province.Mechanic
+	Pseudorandom pseudorandom.Mechanic
+	Year         year.Mechanic
+
+	initializers []Initializer
+	stateHolders []StateHolder
 }
 
 func New() *Mechanics {
-  m := &Mechanics{}
-  mType := reflect.TypeOf(*m)
-  mValue := reflect.Indirect(reflect.ValueOf(m))
-  iType := reflect.TypeOf((*Mechanic)(nil)).Elem()
-  for i := 0; i < mType.NumField(); i++ {
-    f := mType.Field(i)
-    if reflect.PtrTo(f.Type).Implements(iType) {
-      m.mechanics = append(m.mechanics, mValue.Field(i).Addr().Interface().(Mechanic))
-    }
-  }
-  return m
+	m := &Mechanics{}
+	m.buildAccessors()
+	return m
 }
 
+// buildAccessors will use reflection to add every field in Mechanics to internal lists based on which interfaces it implements.
+func (m *Mechanics) buildAccessors() {
+	mType := reflect.TypeOf(*m)
+	mValue := reflect.Indirect(reflect.ValueOf(m))
 
+	initializerType := reflect.TypeOf((*Initializer)(nil)).Elem()
+	stateHolderType := reflect.TypeOf((*StateHolder)(nil)).Elem()
 
-/*
-func (m *Mechanics) mechanics() []Mechanic {
-  reflect.ValueOf(m).
+	// The order of fields should be deterministic. This is not guaranteed by the compiler, so sort them here.
+	fieldNames := make([]string, mType.NumField())
+	for i := 0; i < mType.NumField(); i++ {
+		fieldNames[i] = mType.Field(i).Name
+	}
+	sort.Sort(sort.StringSlice(fieldNames))
+	for _, fieldName := range fieldNames {
+		f, ok := mType.FieldByName(fieldName)
+		if !ok {
+			continue
+		}
+		if reflect.PtrTo(f.Type).Implements(initializerType) {
+			m.initializers = append(m.initializers, mValue.FieldByName(fieldName).Addr().Interface().(Initializer))
+		}
+		if reflect.PtrTo(f.Type).Implements(stateHolderType) {
+			m.stateHolders = append(m.stateHolders, mValue.FieldByName(fieldName).Addr().Interface().(StateHolder))
+		}
+	}
 }
 
-func (m *Mechanics) Set(settings *pb.GameSettings) error {
-  for _, settings := range s.settings() {
-    if err := settings.Validate(settingProto); err != nil {
-      return err
-    }
-  }
-	return nil  
-}
-
-// usage:
-// m := mechanic.New(settingsProto)
-// s := m.InitState()
-// s := m.NewState(gameStateProto)
-// 
-
-
-
-type Settings interface {
-  Set(*pb.GameSettings) error
-  Validate(*pb.GameSettings) error
-  Init(*pb.GameState) error
-  NewState(*pb.GameState) State
-}
-
-type State interface {
-  Set(Settings, *pb.GameState) error
-  Marshal(*pb.GameState) error
-}
-
-type GameSettings struct {
-  Heat heat.Settings
-  Points points.Settings
-  Province province.Settings
-  Pseudorandom pseudorandom.Settings
-  Year year.Settings
-}
-
-func (s *GameSettings) settings() []Settings {
-  return []Settings{
-    s.Heat,
-    s.Points,
-    s.Province,
-    s.Pseudorandom,
-    s.Year,
-  }
-}
-
-func (s *GameSettings) Validate(settingsProto *pb.GameSettings) error {
-  for _, settings := range s.settings() {
-    if err := settings.Validate(settingProto); err != nil {
-      return err
-    }
-  }
+func (m *Mechanics) Initialize(settings *pb.GameSettings) error {
+	for _, i := range m.initializers {
+		if err := i.Initialize(settings); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
-func (s *GameSettings) Set(settingsProto *pb.GameSettings) error {
-  for _, settings := range s.settings() {
-    if err := settings.Set(settingProto); err != nil {
-      return err
-    }
-  }
+func (m *Mechanics) GetState(state *pb.GameState) error {
+	for _, h := range m.stateHolders {
+		if err := h.GetState(state); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
-func (s *GameSettings) Init(stateProto *pb.GameState) error {
-  for _, settings := range s.settings() {
-    if err := settings.Init(stateProto); err != nil {
-      return err
-    }
-  }
-  return nil
+func (m *Mechanics) SetState(state *pb.GameState) error {
+	for _, h := range m.stateHolders {
+		if err := h.SetState(state); err != nil {
+			return err
+		}
+	}
+	return nil
 }
-
-func (s *GameSettings) NewState(stateProto *pb.GameState) error {
-  state := &GameState{
-    settings: s,
-  }
-  state.Set(stateProto)
-  for _, settings := range s.settings() {
-    if err := settings.Init(stateProto); err != nil {
-      return err
-    }
-  }
-  return nil
-}
-
-
-type State struct {
-  Heat heat.State
-  Points points.State
-  Province province.State
-  Pseudorandom pseudorandom.State
-  Year year.State
-}
-
-type mechanicState interface {
-  Update(stateProto *pb.GameState) error
-  Marshal(stateProto *pb.GameState) error
-}
-
-func (s *State) mechanicStates() []mechanicState {
-  return []mechanicState{
-    s.Heat,
-    s.Points,
-    s.Province,
-    s.Pseudorandom,
-    s.Year,
-  }
-}
-
-func (s *State) Update(stateProto *pb.GameState) error {
-  for _, state := range s.mechanicStates() {
-    if err := state.Update(stateProto); err != nil {
-      return err
-    }
-  }
-  return nil
-}
-
-func (s *State) Marshal(stateProto *pb.GameState) error {
-  for _, state := range s.mechanicStates() {
-    if err := state.Marshal(stateProto); err != nil {
-      return err
-    }
-  }
-  return nil
-}
-*/

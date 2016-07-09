@@ -40,7 +40,7 @@ func TestMechanic(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Marshal: unexpected error: %e", err)
 	}
-	n, err := NewState(stateProto, m)
+	n, err := NewState(stateProto, m.settings)
 	if err != nil {
 		t.Fatalf("NewState: unexpected error: %e", err)
 	}

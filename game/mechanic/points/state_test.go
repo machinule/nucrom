@@ -8,7 +8,7 @@ import (
 
 type NewStateCase struct {
 	proto    *pb.GameState
-	prev     *State
+	settings *Settings
 	usa_pol  int32
 	usa_mil  int32
 	usa_cov  int32
@@ -35,9 +35,7 @@ func TestNewState(t *testing.T) {
 					},
 				},
 			},
-			prev: &State{
-				settings: &Settings{},
-			},
+			settings: &Settings{},
 			usa_pol:  4,
 			usa_mil:  5,
 			usa_cov:  3,
@@ -61,12 +59,12 @@ func TestNewState(t *testing.T) {
 					},
 				},
 			},
-			prev: nil,
-			err:  true,
+			settings: nil,
+			err:      true,
 		},
 	}
 	for _, tc := range cases {
-		s, err := NewState(tc.proto, tc.prev)
+		s, err := NewState(tc.proto, tc.settings)
 		if got, want := err != nil, tc.err; got != want {
 			msg := map[bool]string{
 				true:  "error",
@@ -96,7 +94,7 @@ func TestNewState(t *testing.T) {
 		if got, want := s.ussr.cov, tc.ussr_cov; got != want {
 			t.Errorf("ussr cov: got %d, want %d", got, want)
 		}
-		if got, want := s.settings, tc.prev.settings; got != want {
+		if got, want := s.settings, tc.settings; got != want {
 			t.Errorf("settings: got %d, want %d", got, want)
 		}
 	}
