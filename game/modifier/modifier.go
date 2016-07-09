@@ -1,25 +1,27 @@
 package modifier
 
 import (
+	"github.com/machinule/nucrom/game/mechanic"
+	"github.com/machinule/nucrom/game/modifier/heat"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"reflect"
 	"sort"
 )
 
-// A Mover modifies its internal state based on player moves.
+// A Mover modifies a mechanics internal state based on player moves.
 type Mover interface {
-	Move(move *pb.GameMove) error
+	Move(move *pb.GameMove, mechanics *mechanic.Mechanics) error
 }
 
-// A Turner modifies its internal state based on the advancement of turns.
+// A Turner modifies a mechanics internal state based on the advancement of turns.
 type Turner interface {
-	Turn(turn *pb.GameTurn) error
+	Turn(turn *pb.GameTurn, mechanics *mechanic.Mechanics) error
 }
 
 // Modifiers provides accessors to moving and turning for various modifiers.
 type Modifiers struct {
 	// Modifiers are listed here. They will be accessible directly by name, or indirectly by the interfaces they implement.
-	// Treaty treaty.Modifier
+	Heat heat.Modifier
 
 	movers  []Mover
 	turners []Turner
@@ -59,18 +61,18 @@ func (m *Modifiers) buildAccessors() {
 	}
 }
 
-func (m *Modifiers) Move(move *pb.GameMove) error {
+func (m *Modifiers) Move(move *pb.GameMove, mechanics *mechanic.Mechanics) error {
 	for _, t := range m.movers {
-		if err := t.Move(move); err != nil {
+		if err := t.Move(move, mechanics); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (m *Modifiers) Turn(turn *pb.GameTurn) error {
+func (m *Modifiers) Turn(turn *pb.GameTurn, mechanics *mechanic.Mechanics) error {
 	for _, t := range m.turners {
-		if err := t.Turn(turn); err != nil {
+		if err := t.Turn(turn, mechanics); err != nil {
 			return err
 		}
 	}
