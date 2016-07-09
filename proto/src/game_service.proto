@@ -5,6 +5,7 @@ package pb;
 import "enums.proto";
 import "game_settings.proto";
 import "game_state.proto";
+import "game_move.proto";
 
 message JoinGameRequest {
 }
@@ -28,15 +29,26 @@ message GetGameStateResponse {
   GameState state = 2;
 }
 
-message SetTurnRequest {
+message SubmitTurnRequest {
   Player player = 1;
+  int32 turn_index = 2;
+  repeated GameMove move = 3;
 }
 
-message SetTurnResponse {
+message SubmitTurnResponse {
+}
+
+message CancelTurnRequest {
+  Player player = 1;
+  int32 turn_index = 2;
+}
+
+message CancelTurnResponse {
 }
 
 service GameService {
   rpc JoinGame(JoinGameRequest) returns (JoinGameResponse) {}
   rpc GetGameState(GetGameStateRequest) returns (GetGameStateResponse) {}
-  rpc SetTurn(SetTurnRequest) returns (SetTurnResponse) {}
+  rpc SubmitTurn(SubmitTurnRequest) returns (SubmitTurnResponse) {}
+  rpc CancelTurn(CancelTurnRequest) returns (CancelTurnResponse) {}
 }

@@ -64,16 +64,11 @@ message TreatyAmendment {
 
 // ========== Moves ==========
 
-// The top-level moves proto included in Moves.
+// The top-level moves protos included in Moves.
 
-message TreatyMechanicMove {
-  RatifyMove ratify_move = 1;
-  AmendMove amend_move = 2;
+message RatifyTreatyMove {
 }
 
-message RatifyMove {
-}
-
-message AmendMove {
+message AmendTreatyMove {
   TreatyAmendment treaty_delta = 1;
 }

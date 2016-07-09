@@ -36,11 +36,12 @@ func (m *Menu) Ask() string {
     if err != nil {
       return ""
     }
-    c, err := strconv.Atoi(strings.TrimSpace(choice))
+    trimmed := strings.TrimSpace(choice)
+    c, err := strconv.Atoi(trimmed)
     if err != nil {
-      fmt.Printf("'%s' is not a valid choice. Please choose a number.", choice)
+      fmt.Printf("'%s' is not a valid choice. Please choose a number.", trimmed)
     } else if c < 0 || c >= len(m.options) {
-      fmt.Printf("'%d' is not a valid choice. Please choose one of the options.", choice)
+      fmt.Printf("'%d' is not a valid choice. Please choose one of the options.", c)
     } else {
       return m.options[c].Choice
     }

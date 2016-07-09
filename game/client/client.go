@@ -91,8 +91,9 @@ func (c *client) StartTurn() error {
 }
 
 func (c *client) EndTurn() error {
-  _, err := c.service.SetTurn(context.Background(), &pb.SetTurnRequest{
+  _, err := c.service.SubmitTurn(context.Background(), &pb.SubmitTurnRequest{
     Player: c.player,
+    TurnIndex: c.turn.Index,
   })
   if err != nil {
     return fmt.Errorf("ending turn: %v", err)
@@ -101,5 +102,5 @@ func (c *client) EndTurn() error {
 }
 
 func (c *client) GameOver() bool {
-	return c.Turn() > 40
+	return c.Turn() > 10
 }

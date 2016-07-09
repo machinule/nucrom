@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb;
+
+import "treaty.proto";
+
+// GameMove contains a single move.
+message GameMove {
+  // Treaty moves.
+  RatifyTreatyMove ratify_treaty = 1;
+  AmendTreatyMove amend_treaty = 2;  
+}
