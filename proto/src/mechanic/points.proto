@@ -8,17 +8,19 @@ package pb;
 // immutable over the duration of a single game.
 
 message PointsSettings {
-  PointSettings usa_settings = 1;
-  PointSettings ussr_settings = 2;
+  PointStoresSettings usa = 1;
+  PointStoresSettings ussr = 2;
 }
 
-message PointSettings {
-  int32 political_store_init = 1;
-  int32 political_income_base = 2;
-  int32 military_store_init = 3;
-  int32 military_income_base = 4;
-  int32 covert_store_init = 5;
-  int32 covert_income_base = 6;
+message PointStoresSettings {
+  PointStoreSettings political = 1;
+  PointStoreSettings military = 2;
+  PointStoreSettings covert = 3;
+}
+
+message PointStoreSettings {
+  int32 init = 1;
+  int32 income = 2;
 }
 
 // ========== State ==========
@@ -27,12 +29,16 @@ message PointSettings {
 // Mutated each turn based on moves.
 
 message PointsState {
-  PointState usa_state = 1;
-  PointState ussr_state = 2;
+  PointStoresState usa = 1;
+  PointStoresState ussr = 2;
 }
 
-message PointState {
-  int32 political = 1;
-  int32 military = 2;
-  int32 covert = 3;
+message PointStoresState {
+  PointStoreState political = 1;
+  PointStoreState military = 2;
+  PointStoreState covert = 3;
+}
+
+message PointStoreState {
+  int32 count = 1;
 }
