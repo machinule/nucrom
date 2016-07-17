@@ -29,7 +29,7 @@ func (s *Server) Start() error {
 		return fmt.Errorf("failed to listen on '%s': %v", s.port, err)
 	}
 	s.server = grpc.NewServer()
-	gameService := gameservice.New(s.settings)
+	gameService, err := gameservice.New(s.settings)
 	if err != nil {
 		return fmt.Errorf("failed to create game server with settings '%v': %v", s.settings, err)
 	}

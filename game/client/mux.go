@@ -39,6 +39,10 @@ func (m *mux) Join() error {
 	return nil
 }
 
+func (m *mux) State() *pb.GameState {
+  return m.clients[m.curr].State()
+}
+
 func (m *mux) StartTurn() error {
 	return m.clients[m.curr].StartTurn()
 }

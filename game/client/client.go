@@ -17,6 +17,8 @@ type Client interface {
 	Player() pb.Player
 	Turn() int
 	GameOver() bool
+  // TODO(hesswill): this probably shouldn't be exposed.
+  State() *pb.GameState
 }
 
 // A Client contains the necessary state for a game client.
@@ -60,6 +62,10 @@ func (c *client) Turn() int {
 		return int(c.turn.Index)
 	}
 	return 0
+}
+
+func (c *client) State() *pb.GameState {
+  return c.state
 }
 
 func (c *client) Player() pb.Player {

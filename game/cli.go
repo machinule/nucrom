@@ -9,6 +9,7 @@ import (
 	gameserver "github.com/machinule/nucrom/game/server"
 	"github.com/machinule/nucrom/game/setup"
 	"github.com/machinule/nucrom/frontend/menu"
+  "github.com/golang/protobuf/proto"
 )
 
 type game struct {
@@ -62,7 +63,7 @@ func (g *game) GameOn() {
 		log.Fatalf("Failed to join game: %v", err)
 	}
   turnMenu := menu.New([]menu.Option{
-    {"placeholder", "Do nothing"},
+    {"gamestate", "Print game state."},
     {"end", "End turn."},
   })
 	for !g.client.GameOver() {
@@ -71,8 +72,8 @@ func (g *game) GameOn() {
     end := false
     for !end {
       switch turnMenu.Ask() {
-      case "placeholder":
-        fmt.Println("doing nothing")
+      case "gamestate":
+        fmt.Printf("Game State: \n%s\n\n", proto.MarshalTextString(g.client.State()))
       default:
         end = true
       }

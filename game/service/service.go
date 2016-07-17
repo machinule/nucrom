@@ -3,6 +3,8 @@ package service
 
 import (
 	"fmt"
+	"github.com/machinule/nucrom/game/mechanic"
+	"github.com/machinule/nucrom/game/modifier"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"golang.org/x/net/context"
 	"sync"
@@ -13,27 +15,34 @@ type Service struct {
 	settings *pb.GameSettings
 
 	lock    sync.RWMutex
-	state   *pb.GameState
 	turn    *pb.TurnState
   moves   map[pb.Player][]*pb.GameMove
+  mechanics *mechanic.Mechanics
+  modifiers *modifier.Modifiers
 	players <-chan pb.Player
 }
 
 // New creates a new Service with the specified GameSettings.
-func New(s *pb.GameSettings) *Service {
+func New(s *pb.GameSettings) (*Service, error) {
 	p := make(chan pb.Player, 2)
 	p <- pb.Player_USA
 	p <- pb.Player_USSR
+  mechanics := mechanic.New()
+  err := mechanics.Initialize(s)
+  if err != nil {
+    return nil, err
+  }
 	return &Service{
 		settings: s,
-		state:    nil,
 		turn: &pb.TurnState{
 			Index: 0,
 			Moved: nil,
 		},
 		players: p,
     moves: make(map[pb.Player][]*pb.GameMove),
-	}
+    mechanics: mechanics,
+    modifiers: modifier.New(),
+	}, nil
 }
 
 func (s *Service) JoinGame(ctx context.Context, req *pb.JoinGameRequest) (*pb.JoinGameResponse, error) {
@@ -56,7 +65,11 @@ func (s *Service) GetGameState(ctx context.Context, req *pb.GetGameStateRequest)
 	if req.ReturnTurnOnly {
 		return resp, nil
 	}
-	resp.State = s.state
+  resp.State = &pb.GameState{}
+	err := s.mechanics.GetState(resp.State)
+  if err != nil {
+    return nil, err
+  }
 	return resp, nil
 }
 
@@ -66,11 +79,15 @@ func (s *Service) advanceTurn() {
   if len(s.turn.Moved) != 2 {
     return
   }
-  s.turn = &pb.TurnState {
-    Index: s.turn.Index + 1,
-    Moved: nil,
+  s.turn.Index = s.turn.Index + 1
+  s.turn.Moved = nil
+  for _, moves := range s.moves {
+    for _, move := range moves {
+      s.modifiers.Move(move, s.mechanics)
+    }
   }
   s.moves = make(map[pb.Player][]*pb.GameMove)
+  s.modifiers.Turn(nil, s.mechanics)
 }
 
 func (s *Service) SubmitTurn(ctx context.Context, req *pb.SubmitTurnRequest) (*pb.SubmitTurnResponse, error) {
