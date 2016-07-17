@@ -110,7 +110,7 @@ func TestMechanic(t *testing.T) {
 		HeatSettings: &pb.HeatSettings{
 			Init:  70,
 			Min:   0,
-			Mxm:   100,
+			Max:   100,
 			Decay: 5,
 		},
 	}
