@@ -10,6 +10,11 @@ package pb;
 message PointsSettings {
   PointStoresSettings usa = 1;
   PointStoresSettings ussr = 2;
+  
+  
+  // TODO(hesswill): delete when migrated to separate settings.
+  PointSettings usa_settings = 101;
+  PointSettings ussr_settings = 102;
 }
 
 message PointStoresSettings {
@@ -23,6 +28,16 @@ message PointStoreSettings {
   int32 income = 2;
 }
 
+// TODO(hesswill): delete when migrated to separate settings.
+message PointSettings {
+  int32 political_store_init = 1;
+  int32 political_income_base = 2;
+  int32 military_store_init = 3;
+  int32 military_income_base = 4;
+  int32 covert_store_init = 5;
+  int32 covert_income_base = 6;
+}
+
 // ========== State ==========
 
 // The top-level state proto included in GameState.
@@ -31,6 +46,11 @@ message PointStoreSettings {
 message PointsState {
   PointStoresState usa = 1;
   PointStoresState ussr = 2;
+  
+  
+  // TODO(hesswill): delete when migrated to separate settings.
+  PointState usa_state = 101;
+  PointState ussr_state = 102;
 }
 
 message PointStoresState {
@@ -41,4 +61,11 @@ message PointStoresState {
 
 message PointStoreState {
   int32 count = 1;
+}
+
+// TODO(hesswill): delete when migrated to separate settings.
+message PointState {
+  int32 political = 1;
+  int32 military = 2;
+  int32 covert = 3;
 }
