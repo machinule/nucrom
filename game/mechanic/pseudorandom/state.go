@@ -12,7 +12,7 @@ import (
 type State struct {
 	settings *Settings
 	seed     int64
-	r        rand.Rand
+	r        *rand.Rand
 }
 
 // NewState creates a new state from the GameState message and the previous state.
@@ -26,6 +26,7 @@ func NewState(stateProto *pb.GameState, settings *Settings) (*State, error) {
 	return &State{
 		settings: settings,
 		seed:     stateProto.GetPseudorandomState().Seed,
+    r: rand.New(rand.NewSource(stateProto.GetPseudorandomState().Seed)),
 	}, nil
 }
 
@@ -40,16 +41,11 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 	return nil
 }
 
-// GETTERS
-
-func (s *State) Get() int64 {
-	return s.seed
-}
-
 // ACTIONS
 
-func (s *State) Seed(seed int64) {
-	s.r.Seed(seed)
+func (s *State) Reseed() {
+	s.seed = s.r.Int63()
+  s.r = rand.New(rand.NewSource(s.seed))
 }
 
 // Rolls for a particular value (rolls from 0 to 1,000,000)

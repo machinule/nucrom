@@ -33,10 +33,9 @@ func NewSettings(settingsProto *pb.GameSettings) (*Settings, error) {
 
 // InitState creates the initial state for the year mechanic.
 func (s *Settings) InitState() (*State, error) {
-	r := rand.New(rand.NewSource(s.init))
 	return &State{
 		settings: s,
 		seed:     s.init,
-		r:        *r,
+		r:        rand.New(rand.NewSource(s.init)),
 	}, nil
 }
