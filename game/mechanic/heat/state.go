@@ -40,9 +40,9 @@ func (s *State) Heat() int32 {
 
 func (s *State) Chng(mag int32) {
 	s.heat += mag
-	if s.heat > s.settings.mxm {
+	if s.heat > s.settings.max {
 		// The world ends, ya messed up
-		s.heat = s.settings.mxm
+		s.heat = s.settings.max
 	}
 	if s.heat < s.settings.min {
 		s.heat = s.settings.min

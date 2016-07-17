@@ -11,7 +11,7 @@ func CreateGameSettings() *pb.GameSettings {
 		HeatSettings: &pb.HeatSettings{
 			Init:  50,
 			Min:   0,
-			Mxm:   100,
+			Max:   100,
 			Decay: 5,
 		},
 		PointsSettings: &pb.PointsSettings{

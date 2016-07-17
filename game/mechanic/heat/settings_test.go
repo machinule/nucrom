@@ -9,7 +9,7 @@ type NewSettingsCase struct {
 	proto *pb.GameSettings
 	init  int32
 	min   int32
-	mxm   int32
+	max   int32
 	decay int32
 	err   bool
 }
@@ -20,19 +20,19 @@ func TestNewSettings(t *testing.T) {
 			proto: &pb.GameSettings{},
 			init:  0,
 			min:   0,
-			mxm:   100,
+			max:   100,
 			decay: 0,
 			err:   true,
 		},
 		{
 			proto: &pb.GameSettings{
 				HeatSettings: &pb.HeatSettings{
-					Mxm: 50,
+					Max: 50,
 				},
 			},
 			init:  0,
 			min:   0,
-			mxm:   50,
+			max:   50,
 			decay: 0,
 			err:   false,
 		},
@@ -41,13 +41,13 @@ func TestNewSettings(t *testing.T) {
 				HeatSettings: &pb.HeatSettings{
 					Init:  50,
 					Min:   0,
-					Mxm:   100,
+					Max:   100,
 					Decay: 5,
 				},
 			},
 			init:  50,
 			min:   0,
-			mxm:   100,
+			max:   100,
 			decay: 5,
 			err:   false,
 		},
@@ -71,8 +71,8 @@ func TestNewSettings(t *testing.T) {
 		if got, want := s.min, tc.min; got != want {
 			t.Errorf("case %d - imin: got %d, want %d", index, got, want)
 		}
-		if got, want := s.mxm, tc.mxm; got != want {
-			t.Errorf("case %d - imxm: got %d, want %d", index, got, want)
+		if got, want := s.max, tc.max; got != want {
+			t.Errorf("case %d - imax: got %d, want %d", index, got, want)
 		}
 		if got, want := s.min, tc.min; got != want {
 			t.Errorf("case %d - imin: got %d, want %d", index, got, want)
@@ -95,7 +95,7 @@ func TestInitState(t *testing.T) {
 			settings: &Settings{
 				init:  60,
 				min:   10,
-				mxm:   90,
+				max:   90,
 				decay: 5,
 			},
 			heat: 60,

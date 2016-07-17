@@ -10,7 +10,7 @@ package pb;
 message HeatSettings {
   int32 init = 1;
   int32 min = 2;
-  int32 mxm = 3;  // Maximum.
+  int32 max = 3;  // Maximum.
   int32 decay = 4;
 }
 
