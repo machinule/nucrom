@@ -4,6 +4,7 @@ package settings
 import (
 	"github.com/machinule/nucrom/game/settings/heat"
 	"github.com/machinule/nucrom/game/settings/points"
+	"github.com/machinule/nucrom/game/settings/pseudorandom"
 	"github.com/machinule/nucrom/game/settings/year"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"reflect"
@@ -28,9 +29,10 @@ type MechanicSettings interface {
 // Settings provides accessors to settings of various mechanics.
 type Settings struct {
 	// Settings are listed here. They will be accessible directly by name, or indirectly by the MechanicSettings interface.
-	Heat   heat.Settings
-	Points points.Settings
-	Year   year.Settings
+	Heat         heat.Settings
+	Points       points.Settings
+	Pseudorandom pseudorandom.Settings
+	Year         year.Settings
 
 	mechanicSettings []MechanicSettings
 }
