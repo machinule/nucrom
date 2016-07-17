@@ -3,6 +3,7 @@ package modifier
 import (
 	"github.com/machinule/nucrom/game/mechanic"
 	"github.com/machinule/nucrom/game/modifier/heat"
+	"github.com/machinule/nucrom/game/modifier/points"
 	"github.com/machinule/nucrom/game/modifier/pseudorandom"
 	"github.com/machinule/nucrom/game/modifier/year"
 	pb "github.com/machinule/nucrom/proto/gen"
@@ -24,8 +25,9 @@ type Turner interface {
 type Modifiers struct {
 	// Modifiers are listed here. They will be accessible directly by name, or indirectly by the interfaces they implement.
 	Heat heat.Modifier
-  Year year.Modifier
+  Points points.Modifier
   Pseudorandom pseudorandom.Modifier
+  Year year.Modifier
 
 	movers  []Mover
 	turners []Turner

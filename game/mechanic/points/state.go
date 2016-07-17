@@ -63,6 +63,16 @@ func (s *State) Marshal(stateProto *pb.GameState) error {
 	return nil
 }
 
+func (s *State) ApplyBaseIncome() {
+  s.usa.pol += s.settings.usa.pol_income
+  s.usa.mil += s.settings.usa.mil_income
+  s.usa.cov += s.settings.usa.cov_income
+
+  s.ussr.pol += s.settings.ussr.pol_income
+  s.ussr.mil += s.settings.ussr.mil_income
+  s.ussr.cov += s.settings.ussr.cov_income
+}
+
 // GETTERS
 
 func (s *State) POL(player pb.Player) int32 {
