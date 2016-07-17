@@ -155,3 +155,13 @@ enum Culture {
   GERMAN = 4;
   PORTUGUESE = 5;
 }
+
+enum LeaderType {
+    NO_LEADER = 0;
+
+    NORMAL = 1;
+    STRONG = 2;
+    ROGUE = 3;
+
+    DISSIDENT = 4;
+}
