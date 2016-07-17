@@ -10,7 +10,20 @@ import "enums.proto";
 // Immutable over the duration of a single game.
 
 message LeadersSettings {
-  repeated LeaderSettings leader_settings = 1;
+  repeated ProvinceLeaderSettings province_leader_settings = 1;
+}
+
+message ProvinceLeaderSettings {
+  pb.ProvinceId id = 1;
+  repeated LeaderSettings leader_settings = 2;
+  repeated InitLeaderSettings init_leader_settings = 3;
+}
+
+message InitLeaderSettings {
+  string name = 1;
+  LeaderType type = 2;
+  bool dissident = 3;
+  bool elected = 4;
 }
 
 message LeaderSettings {
@@ -18,9 +31,7 @@ message LeaderSettings {
   int32 birth_year = 2;
   int32 start_year = 3;
   int32 end_year = 4;
-  Culture culture = 5;
-  repeated ProvinceId provinces = 6;
-  bool elected = 8;
+  bool elected = 5;
 }
 
 // ========== State ==========
@@ -29,12 +40,19 @@ message LeaderSettings {
 // Mutated each turn based on moves.
 
 message LeadersState {
-  repeated LeaderState active = 1;
-  repeated LeaderState dead = 2;
-  repeated LeaderState inactive = 3;
+  repeated ProvinceLeaderState province_leader_states = 1;
+}
+
+message ProvinceLeaderState {
+  ProvinceId id = 1;
+  LeaderState active = 2;
+  repeated LeaderState deactivated = 3;
+  LeaderState dissident = 4;
 }
 
 message LeaderState {
   string name = 1;
-  ProvinceId province = 2; // Only if currently leading; NONE for dissidents
+  LeaderType type = 2;
+  bool elected = 3;
+  int32 birth_year = 4;
 }
