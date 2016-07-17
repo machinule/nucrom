@@ -3,22 +3,22 @@ package client
 
 import (
 	"fmt"
-  "time"
 	pb "github.com/machinule/nucrom/proto/gen"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"time"
 )
 
 type Client interface {
 	Connect() error
 	Join() error
-  StartTurn() error
+	StartTurn() error
 	EndTurn() error
 	Player() pb.Player
 	Turn() int
 	GameOver() bool
-  // TODO(hesswill): this probably shouldn't be exposed.
-  State() *pb.GameState
+	// TODO(hesswill): this probably shouldn't be exposed.
+	State() *pb.GameState
 }
 
 // A Client contains the necessary state for a game client.
@@ -65,7 +65,7 @@ func (c *client) Turn() int {
 }
 
 func (c *client) State() *pb.GameState {
-  return c.state
+	return c.state
 }
 
 func (c *client) Player() pb.Player {
@@ -73,37 +73,37 @@ func (c *client) Player() pb.Player {
 }
 
 func (c *client) StartTurn() error {
-  for {
-    s, err := c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
-      ReturnTurnOnly: true,
-    })
-    if err != nil {
-      return fmt.Errorf("getting latest turn from server: %v", err)
-    }
-    if c.turn == nil || s.Turn.Index != c.turn.Index {
-      s, err = c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
-        ReturnTurnOnly: false,
-      })
-      if err != nil {
-        return fmt.Errorf("getting game state from server: %v", err)
-      }
-      c.turn = s.Turn
-      c.state = s.State
-      break
-    }    
-    time.Sleep(1 * time.Second)
-  } 
-  return nil
+	for {
+		s, err := c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
+			ReturnTurnOnly: true,
+		})
+		if err != nil {
+			return fmt.Errorf("getting latest turn from server: %v", err)
+		}
+		if c.turn == nil || s.Turn.Index != c.turn.Index {
+			s, err = c.service.GetGameState(context.Background(), &pb.GetGameStateRequest{
+				ReturnTurnOnly: false,
+			})
+			if err != nil {
+				return fmt.Errorf("getting game state from server: %v", err)
+			}
+			c.turn = s.Turn
+			c.state = s.State
+			break
+		}
+		time.Sleep(1 * time.Second)
+	}
+	return nil
 }
 
 func (c *client) EndTurn() error {
-  _, err := c.service.SubmitTurn(context.Background(), &pb.SubmitTurnRequest{
-    Player: c.player,
-    TurnIndex: c.turn.Index,
-  })
-  if err != nil {
-    return fmt.Errorf("ending turn: %v", err)
-  }
+	_, err := c.service.SubmitTurn(context.Background(), &pb.SubmitTurnRequest{
+		Player:    c.player,
+		TurnIndex: c.turn.Index,
+	})
+	if err != nil {
+		return fmt.Errorf("ending turn: %v", err)
+	}
 	return nil
 }
 

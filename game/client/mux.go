@@ -40,7 +40,7 @@ func (m *mux) Join() error {
 }
 
 func (m *mux) State() *pb.GameState {
-  return m.clients[m.curr].State()
+	return m.clients[m.curr].State()
 }
 
 func (m *mux) StartTurn() error {

@@ -24,10 +24,10 @@ type Turner interface {
 // Modifiers provides accessors to moving and turning for various modifiers.
 type Modifiers struct {
 	// Modifiers are listed here. They will be accessible directly by name, or indirectly by the interfaces they implement.
-	Heat heat.Modifier
-  Points points.Modifier
-  Pseudorandom pseudorandom.Modifier
-  Year year.Modifier
+	Heat         heat.Modifier
+	Points       points.Modifier
+	Pseudorandom pseudorandom.Modifier
+	Year         year.Modifier
 
 	movers  []Mover
 	turners []Turner
