@@ -10,28 +10,15 @@ import "enums.proto";
 // Immutable over the duration of a single game.
 
 message LeadersSettings {
-  repeated ProvinceLeaderSettings province_leader_settings = 1;
+  repeated LeaderSettings leader_settings = 1;
 }
 
-message ProvinceLeaderSettings {
-  pb.ProvinceId id = 1;
-  repeated LeaderSettings leader_settings = 2;
-  repeated InitLeaderSettings init_leader_settings = 3;
-}
-
-message InitLeaderSettings {
-  string name = 1;
-  LeaderType type = 2;
-  bool dissident = 3;
-  bool elected = 4;
-}
-
+// LeaderSettings may be used in the state for generated leaders.
 message LeaderSettings {
   string name = 1;
   int32 birth_year = 2;
-  int32 start_year = 3;
-  int32 end_year = 4;
-  bool elected = 5;
+  pb.ProvinceId birth_province = 3;
+  repeated LeaderPosition positions = 4;
 }
 
 // ========== State ==========
@@ -40,19 +27,28 @@ message LeaderSettings {
 // Mutated each turn based on moves.
 
 message LeadersState {
-  repeated ProvinceLeaderState province_leader_states = 1;
-}
-
-message ProvinceLeaderState {
-  ProvinceId id = 1;
-  LeaderState active = 2;
-  repeated LeaderState deactivated = 3;
-  LeaderState dissident = 4;
+  repeated LeaderState leader_states = 1;
+  repeated LeaderSettings generated_leaders = 2;
 }
 
 message LeaderState {
   string name = 1;
-  LeaderType type = 2;
-  bool elected = 3;
-  int32 birth_year = 4;
+  LeaderPosition current_position = 2;
+}
+
+message LeaderPosition {
+  // Title of the position.
+  pb.LeaderTitle title = 1;
+  // The year the leader started the position, inclusive.
+  int32 start_year = 2;
+  // The year the leader ended the position, exclusive.
+  int32 end_year = 3;
+  // The province in which the leader holds the position.
+  pb.ProvinceId province = 4;
+  // Whether the leader was elected to this position.
+  bool elected = 5;
+  // Whether the leader represents dissidents in this position.
+  bool dissident = 6;
+  // The type of the leader in this position.
+  LeaderType type = 7;
 }

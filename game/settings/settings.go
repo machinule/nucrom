@@ -3,6 +3,7 @@ package settings
 
 import (
 	"github.com/machinule/nucrom/game/settings/heat"
+	"github.com/machinule/nucrom/game/settings/leaders"
 	"github.com/machinule/nucrom/game/settings/points"
 	"github.com/machinule/nucrom/game/settings/pseudorandom"
 	"github.com/machinule/nucrom/game/settings/year"
@@ -30,6 +31,7 @@ type MechanicSettings interface {
 type Settings struct {
 	// Settings are listed here. They will be accessible directly by name, or indirectly by the MechanicSettings interface.
 	Heat         heat.Settings
+  Leaders      leaders.Settings
 	Points       points.Settings
 	Pseudorandom pseudorandom.Settings
 	Year         year.Settings

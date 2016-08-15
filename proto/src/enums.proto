@@ -165,3 +165,8 @@ enum LeaderType {
 
     DISSIDENT = 4;
 }
+
+enum LeaderTitle {
+  NO_TITLE = 0;
+  PRESIDENT = 1;
+}
